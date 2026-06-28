@@ -6,8 +6,8 @@ public class MainCamera : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject cameraObject; 
 
-    public float sensivityX = 1;
-    public float sensivityY = 1;
+    public float sensitivityX = 0.5f;
+    public float sensitivityY = 0.5f;
     private float xRotation;
     private float yRotation;
     
@@ -34,11 +34,10 @@ public class MainCamera : MonoBehaviour
         //Significa quantos pixels o mouse se moveu dês do ultimo frame
         Vector2 delta = Mouse.current.delta.ReadValue();
 
-        xRotation -= delta.y * sensivityX;
-        yRotation += delta.x * sensivityY;
+        xRotation -= delta.y * sensitivityY;
+        yRotation += delta.x * sensitivityX;
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-        yRotation = Mathf.Clamp(yRotation, -90f, 90f);
 
         SetRotationInTheCamera();
     }

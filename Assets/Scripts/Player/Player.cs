@@ -101,18 +101,25 @@ public class Player : MonoBehaviour
 
         direction.Normalize();
 
-        Vector3 velocity = rb.linearVelocity;
-
-        if (isRunning){
-            currentSpeed += runningAcrescent;    
+        if (isRunning)
+        {
+            currentSpeed += runningAcrescent;
             currentStamina -= staminaDrain * Time.fixedDeltaTime;
-        }else{
+        }
+        else
+        {
             currentStamina += staminaRecovery * Time.fixedDeltaTime;
         }
+
         currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
 
-        velocity.x = direction.x * currentSpeed;
-        velocity.z = direction.z * currentSpeed;
+        Vector3 moveDirection =
+            transform.forward * direction.z +
+            transform.right * direction.x;
+
+        Vector3 velocity = rb.linearVelocity;
+        velocity.x = moveDirection.x * currentSpeed;
+        velocity.z = moveDirection.z * currentSpeed;
 
         rb.linearVelocity = velocity;
     }
