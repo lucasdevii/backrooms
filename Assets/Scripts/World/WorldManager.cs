@@ -11,7 +11,7 @@ public class WorldManager : MonoBehaviour
     public Vector3Int playerChunk;
     public int chunkSize = 15;
     public int renderDistance = 12;
-    public Chunk[][] matriz;
+    public Chunk[,] matriz;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,7 +22,7 @@ public class WorldManager : MonoBehaviour
         }
 
         int matrizSize = (renderDistance * 2) + 1;
-        matriz = new Chunk[matrizSize][];
+        matriz = new Chunk[matrizSize, matrizSize];
         
         DefinePlayerChunk();
 
@@ -47,7 +47,7 @@ public class WorldManager : MonoBehaviour
     void InstantiateMatrizOfChunks()
     {
         //Retorna o indice de onde fica o jogador na matriz (no centro da renderização)
-        int matrizCenter = matriz.Length / 2;
+        int matrizCenter = matriz.GetLength(0) / 2;
         
         //Começa com as coordenadas do chunk superior esquerdo
         int initialChunkX = playerChunk.x - matrizCenter;
@@ -55,18 +55,15 @@ public class WorldManager : MonoBehaviour
 
         int currentChunkY = initialChunkY;
         
-        for(int y = 0; y < matriz.Length; y++){
-            Chunk[] row = new Chunk[matriz.Length];
+        for(int y = 0; y < matriz.GetLength(0); y++){
 
             int currentChunkX = initialChunkX;
 
-            for(int x = 0; x < matriz.Length; x++){
-                row[x] = new Chunk(seed, currentChunkX, currentChunkY);
+            for(int x = 0; x < matriz.GetLength(1); x++){
+                matriz[y, x] = new Chunk(seed, currentChunkX, currentChunkY);
 
                 currentChunkX++;
             }
-            //Da um "push" na row
-            matriz[y] = row;
             
             currentChunkY--;
         }   
