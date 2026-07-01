@@ -55,12 +55,12 @@ public class WorldManager : MonoBehaviour
 
         int currentChunkY = initialChunkY;
         
-        for(int y = 0; y < matriz.GetLength(0); y++){
+        for(int row = 0; row < matriz.GetLength(0); row++){
 
             int currentChunkX = initialChunkX;
 
-            for(int x = 0; x < matriz.GetLength(1); x++){
-                matriz[y, x] = new Chunk(seed, currentChunkX, currentChunkY);
+            for(int col = 0; col < matriz.GetLength(1); col++){
+                matriz[row, col] = new Chunk(seed, currentChunkX, currentChunkY);
 
                 currentChunkX++;
             }

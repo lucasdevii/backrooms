@@ -1,7 +1,56 @@
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-UserSettings/
+# Unity generated files
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Pp]ackages/*/PackageCache/
+/[Aa]ssets/AssetStoreTools*
+/[Aa]ssets/Plugins/*
+
+# Unity3D generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+*.csproj.meta
+*.unityproj.meta
+*.sln.meta
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.ide
+*.tmp
+*.cache
+*.log
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.slnx
+*.userprefs
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local environment / secrets
+.env
+*.local
+
+# Burst / IL2CPP / Assembly artifacts
+Library/BurstCache/
+Library/ScriptAssemblies/
+Library/PackageCache/
+Temp/UnityLockfile
+
+# Optional: keep only source assets, not generated imports
+/[Aa]ssets/**/*.meta

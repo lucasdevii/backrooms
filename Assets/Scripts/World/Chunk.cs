@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -5,7 +6,10 @@ public class Chunk
 {
     private ulong worldSeed;
     private ulong chunkSeed;
+    private int cellsQuantity = 32;
     private Vector3Int position;
+    private Cell[,] internalGrid;
+    
 
     public Chunk(ulong worldSeed, int chunkX, int chunkZ)
     {
@@ -13,8 +17,11 @@ public class Chunk
         position.z = chunkZ;
 
         this.worldSeed = worldSeed;
+        internalGrid = new Cell[cellsQuantity, cellsQuantity];
 
         chunkSeed = GenerateChunkSeed();
+
+        GenerateCellsInGrid();
     }
 
     
@@ -38,4 +45,31 @@ public class Chunk
 
         return chunkSeed;
     }
+    
+    void GenerateCellsInGrid()
+    {
+        Noise.DefaultNoise(chunkSeed, position.x, position.y);
+    }
 }
+// -------------- IDEIA ---------------
+// Chunk
+// │
+// ├── Criar sementes
+// │
+// ├── Expandir salas
+// │
+// ├── Resolver colisões
+// │
+// ├── Encontrar grupos conectados
+// │
+// ├── Criar corredores entre grupos
+// │
+// ├── Gerar paredes
+// │
+// ├── Gerar piso
+// │
+// ├── Posicionar portas
+// │
+// ├── Adicionar objetos
+// │
+// └── Iluminação
