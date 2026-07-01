@@ -21,7 +21,7 @@ public class Chunk
 
         chunkSeed = GenerateChunkSeed();
 
-        GenerateCellsInGrid();
+        ChunkDataGenerator.Generate(internalGrid, chunkSeed, position);
     }
 
     

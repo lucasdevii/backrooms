@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
 
-
-
 public class WorldManager : MonoBehaviour
 {
     [SerializeField] private Transform playerPosition;
