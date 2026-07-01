@@ -5,11 +5,11 @@ public static class RoomPositionSelector
 {
 
     //transforma o array em um array com coordenada das celulas selecionadas para serem salas.
-    public static List<Vector2Int> GetRoomsCells(Cell[,] matriz, ulong seed, Vector2Int position)
+    public static List<Vector2Int> GetRoomsCells(Cell[,] matriz, ulong seed, Vector2Int chunkPosition)
     {
         List<Vector2Int> selectedCells = new List<Vector2Int>();
 
-        float value = Noise.DefaultNoise(seed, position.x, position.y);
+        float value = Noise.DefaultNoise(seed, chunkPosition.x, chunkPosition.y);
         int maxSize = matriz.GetLength(0);
         int numberOfRooms;
         
@@ -24,27 +24,57 @@ public static class RoomPositionSelector
         else numberOfRooms = 8; // 8 SALAS
 
         //Após determinar a quantidade de salas, busca as celulas para serem salas
-        SelectRooms(selectedCells, matriz.GetLength(0), numberOfRooms, seed, position, value);
+        SelectRooms(selectedCells, matriz.GetLength(0), numberOfRooms, seed, chunkPosition, value);
+
+        //Expande as salas
+        ScalingRooms();
 
         return selectedCells;
     }
 
     private static void SelectRooms(
-        List<Vector2Int> list, 
+        List<Vector2Int> selectedCellsList, 
         int matrizSize,
         int numberOfRooms, 
         ulong seed, 
-        Vector2Int position,
+        Vector2Int chunkPosition,
         float value
     )
     {
-        for(int i = 0; i < numberOfRooms; i++){
-            int row = Math.Ceiling(Noise.DefaultNoise(seed, position.x, position.y, value, 1) * matrizSize);
-            int col = Math.Ceiling(Noise.DefaultNoise(seed, position.x, position.y, value, 2) * matrizSize);
 
-            list.add();    
-        }
+        float rowWeight = 938.4f;
+        float colWeight = 752.9f;
+
+        int attempts = 0;
+
+        for(int i = 0; i < numberOfRooms; i++){
+            //Loop de tentativas, caso a casa da vez já esteja sendo utilizada roda novamente o while.
+            while (true){
+                int row = (int)Math.Ceiling(Noise.DefaultNoise(seed, chunkPosition.x, chunkPosition.y, value, rowWeight, i, attempts) * matrizSize);
+                int col = (int)Math.Ceiling(Noise.DefaultNoise(seed, chunkPosition.x, chunkPosition.y, value, colWeight, i, attempts) * matrizSize);
+
+                Vector2Int position;
+
+                position.x = col;
+                position.y = row;
+
+                //Se essa posição ainda n foi utilizada, é válida.
+                if(!selectedCellsList.Contains(position)){
+                    selectedCellsList.Add(position);
+                    attempts = 0;
+                    break;
+                }
     
+                attempts++;
+            }
+
+        }
+    }
+
+    private static void ScalingRooms()
+    {
         
     }
+
+
 }

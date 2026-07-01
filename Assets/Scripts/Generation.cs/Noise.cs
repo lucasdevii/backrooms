@@ -21,10 +21,10 @@ public static class Noise
         float valuesMultFactor = 0;
 
         for(int i = 0; i < values.Length; i++){
-            valuesMultFactor += (values[i] * weights[i % weights.Length]);
+            valuesMultFactor += values[i] * weights[i % weights.Length];
         }
         
         //Retorna um valor entre 0 e 1;
-        return Mathf.Sin((seed * SeedWeight + valuesMultFactor) + 1f * 0.5f);
+        return (Mathf.Sin((seed * SeedWeight + valuesMultFactor)) + 1f) * 0.5f;
     }
 }
