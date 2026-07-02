@@ -129,12 +129,10 @@ public static class RoomPositionSelector
 
     private static void ResizeRoom(Cell[,] matriz, Vector2Int pointOfRoom, int cellsForExpanded)
     {
-        for(int y = pointOfRoom.y; y < pointOfRoom.y + cellsForExpanded; y++)
-        {
-            for(int x = pointOfRoom.x; x < pointOfRoom.x + cellsForExpanded; x++)
-            {
-                // implementação futura
-            }
-        }
+        int minX = Math.Clamp(pointOfRoom.x - cellsForExpanded, 0, matriz.GetLength(1) - 1);
+        int maxX = Math.Clamp(pointOfRoom.x + cellsForExpanded, 0, matriz.GetLength(1) - 1);
+
+        int minY = Math.Clamp(pointOfRoom.y - cellsForExpanded, 0, matriz.GetLength(0) - 1);
+        int maxY = Math.Clamp(pointOfRoom.y + cellsForExpanded, 0, matriz.GetLength(0) - 1);  
     }
 }
