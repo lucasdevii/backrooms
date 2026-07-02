@@ -32,7 +32,7 @@ public class WorldManager : MonoBehaviour
     {
         DefinePlayerChunk();
     }
-
+    
     void DefinePlayerChunk()
     {
         if (playerPosition == null) return;
