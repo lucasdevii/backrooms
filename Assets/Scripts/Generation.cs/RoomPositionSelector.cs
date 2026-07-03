@@ -46,35 +46,38 @@ public static class RoomPositionSelector
         const float rowWeight = 938.4f;
         const float colWeight = 752.9f;
 
+        int attempts = 0;
+
         for(int i = 0; i < numberOfRooms; i++)
         {
-            int attempts = 0;
+            
+            int row = Mathf.Clamp(
+                (int)(Noise.DefaultNoise(seed, chunkPosition.x, chunkPosition.y, rowWeight, i, attempts) * matrizSize),
+                0,
+                matrizSize - 1
+            );
 
-            //Loop de tentativas, caso a casa da vez já esteja sendo utilizada roda novamente o while.
-            while(attempts < 100)
+            int col = Mathf.Clamp(
+                (int)(Noise.DefaultNoise(seed, chunkPosition.x, chunkPosition.y, colWeight, i, attempts) * matrizSize),
+                0,
+                matrizSize - 1
+            );
+
+            Vector2Int position = new Vector2Int(col, row);
+
+            //Se essa posição ainda n foi utilizada, é válida.
+            if (!selectedCellsList.Contains(position))
             {
-                int row = Mathf.Clamp(
-                    (int)(Noise.DefaultNoise(seed, chunkPosition.x, chunkPosition.y, rowWeight, i, attempts) * matrizSize),
-                    0,
-                    matrizSize - 1
-                );
-
-                int col = Mathf.Clamp(
-                    (int)(Noise.DefaultNoise(seed, chunkPosition.x, chunkPosition.y, colWeight, i, attempts) * matrizSize),
-                    0,
-                    matrizSize - 1
-                );
-
-                Vector2Int position = new Vector2Int(col, row);
-
-                //Se essa posição ainda n foi utilizada, é válida.
-                if(!selectedCellsList.Contains(position))
-                {
-                    selectedCellsList.Add(position);
-                    break;
-                }
-
+                selectedCellsList.Add(position);
+                attempts = 0;
+            }
+            else
+            {
                 attempts++;
+
+                if (attempts >= 100) break;
+
+                i--;
             }
         }
     }
@@ -127,6 +130,7 @@ public static class RoomPositionSelector
         return (int)Math.Floor((float)chunkSize / numberOfRooms);
     }
 
+    //Função que faz o ponto de room expandir
     private static void ResizeRoom(Cell[,] matriz, Vector2Int pointOfRoom, int cellsForExpanded)
     {
         int minX = Math.Clamp(pointOfRoom.x - cellsForExpanded, 0, matriz.GetLength(1) - 1);
@@ -134,5 +138,11 @@ public static class RoomPositionSelector
 
         int minY = Math.Clamp(pointOfRoom.y - cellsForExpanded, 0, matriz.GetLength(0) - 1);
         int maxY = Math.Clamp(pointOfRoom.y + cellsForExpanded, 0, matriz.GetLength(0) - 1);  
+
+        for(int y = minY; y <= maxY; y++){
+            for (int x = minX; x <= maxX; x++){
+                matriz[y, x].ChangeCellType(Cell.CellType.Room);
+            }
+        }
     }
 }

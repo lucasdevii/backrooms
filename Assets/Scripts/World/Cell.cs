@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Cell
 {
-    enum Type
+    public enum CellType
     {
         Room,
         Maze,
@@ -13,7 +13,7 @@ public class Cell
     private ulong chunkSeed;
     private Vector2Int position;
 
-    private Type type;
+    private CellType type;
     
     public Cell(ulong chunkSeed, int row, int col)
     {
@@ -27,5 +27,8 @@ public class Cell
     }
     public ulong GetChunkSeed(){
         return chunkSeed;
+    }
+    public void ChangeCellType(CellType newCellType){
+        type = newCellType;
     }
 }
