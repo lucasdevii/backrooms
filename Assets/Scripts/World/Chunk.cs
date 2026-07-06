@@ -4,17 +4,16 @@ using UnityEngine.UIElements;
 
 public class Chunk
 {
-    private ulong worldSeed;
-    private ulong chunkSeed;
-    private int cellsQuantity = 32;
-    private Vector3Int position;
-    private Cell[,] internalGrid;
-    
+    // Removido o 'private' e adicionado 'public' com 'protected set'
+    public ulong worldSeed { get; protected set; }
+    public ulong chunkSeed { get; protected set; } 
+    public int cellsQuantity { get; private set; } = 32; // Também transformada em propriedade de leitura
+    public Vector2Int position { get; protected set; }
+    public Cell[,] internalGrid; 
 
     public Chunk(ulong worldSeed, int chunkX, int chunkZ)
     {
-        position.x = chunkX;
-        position.z = chunkZ;
+        position = new Vector2Int(chunkX, chunkZ);
 
         this.worldSeed = worldSeed;
         internalGrid = new Cell[cellsQuantity, cellsQuantity];
@@ -35,7 +34,7 @@ public class Chunk
         chunkSeed = worldSeed;
 
         chunkSeed ^= (ulong)position.x * 0x9E3779B185EBCA87UL;
-        chunkSeed ^= (ulong)position.z * 0xC2B2AE3D27D4EB4FUL;
+        chunkSeed ^= (ulong)position.y * 0xC2B2AE3D27D4EB4FUL;
 
         chunkSeed ^= chunkSeed >> 30;
         chunkSeed *= 0xBF58476D1CE4E5B9UL;
@@ -45,11 +44,8 @@ public class Chunk
 
         return chunkSeed;
     }
-    
-    void GenerateCellsInGrid()
-    {
-        Noise.DefaultNoise(chunkSeed, position.x, position.y);
-    }
+
+
 }
 // -------------- IDEIA ---------------
 // Chunk

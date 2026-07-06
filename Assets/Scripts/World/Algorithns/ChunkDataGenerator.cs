@@ -4,8 +4,10 @@ public static class ChunkDataGenerator
 {
     public static void Generate(Cell[,] matriz, ulong seed, Vector2Int position)
     {
-        List<Vector2Int> roomPoints = RoomPositionSelector.GetRoomsCells(matriz, seed, position);
-        
+        List<Vector2Int> selectedRooms = new List<Vector2Int>();
+
+        List<Room> chunkRoomsList = new List<Room>(RoomServices.GenerateRooms(matriz, seed, position));
+
     }
 
 
