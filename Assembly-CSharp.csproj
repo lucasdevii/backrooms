@@ -52,10 +52,8 @@
     <Compile Include="Assets\Scripts\Camera\MainCamera.cs" />
     <Compile Include="Assets\Scripts\World\Cell.cs" />
     <Compile Include="Assets\Scripts\World\Chunk.cs" />
-    <Compile Include="Assets\Scripts\Generation.cs\Chunk\CorridorsServices.cs" />
     <Compile Include="Assets\Scripts\Generation.cs\Noise.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
-    <Compile Include="Assets\Scripts\Generation.cs\Chunk\RoomServices.cs" />
     <Compile Include="Assets\Scripts\World\Algorithns\ChunkDataGenerator.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\World\WorldManager.cs" />

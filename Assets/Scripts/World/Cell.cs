@@ -1,23 +1,23 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Cell
 {
-    public enum CellType
-    {
-        Room,
-        Maze,
-        Wall,
-        Door
+    public enum Direction { 
+        Top, 
+        Left, 
+        Right, 
+        Bottom 
     }
 
     private ulong chunkSeed;
     private Vector2Int position;
-
-    private CellType type;
+    private HashSet<Direction> openedWalls;
     
     public Cell(ulong chunkSeed, int row, int col)
     {
         this.chunkSeed = chunkSeed;
+        openedWalls = new HashSet<Direction>();
         position.x = col;
         position.y = row;
     }
@@ -28,7 +28,8 @@ public class Cell
     public ulong GetChunkSeed(){
         return chunkSeed;
     }
-    public void ChangeCellType(CellType newCellType){
-        type = newCellType;
+
+    public void SetOpenedWalls(Direction wall){
+        openedWalls.Add(wall);
     }
 }

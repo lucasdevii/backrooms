@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class Chunk
     // Removido o 'private' e adicionado 'public' com 'protected set'
     public ulong worldSeed { get; protected set; }
     public ulong chunkSeed { get; protected set; } 
-    public int cellsQuantity { get; private set; } = 32; // Também transformada em propriedade de leitura
+    public int cellsQuantity { get; protected set; } = 32; // Também transformada em propriedade de leitura
     public Vector2Int position { get; protected set; }
     public Cell[,] internalGrid; 
 
@@ -21,6 +22,7 @@ public class Chunk
 
         chunkSeed = GenerateChunkSeed();
 
+        ChunkDataGenerator.InitializeMatrix(internalGrid, chunkSeed);
         ChunkDataGenerator.Generate(internalGrid, chunkSeed, position);
     }
 
@@ -44,6 +46,26 @@ public class Chunk
         chunkSeed ^= chunkSeed >> 31;
 
         return chunkSeed;
+    }
+
+
+    public static Vector2Int GetInitCell(ulong seed, Vector2Int chunkPosition, int matrizSize, float weight = 1)
+    {
+        int xWeight = 1;
+        int yWeight = 2;
+
+        return new Vector2Int(
+            Mathf.FloorToInt(
+                Noise.DefaultNoise(
+                    seed, chunkPosition.x, chunkPosition.y, weight, xWeight
+                ) * matrizSize
+            ), 
+            Mathf.FloorToInt(
+                Noise.DefaultNoise(
+                    seed, chunkPosition.x, chunkPosition.y, weight,yWeight
+                ) * matrizSize
+            )
+        );
     }
 
 
