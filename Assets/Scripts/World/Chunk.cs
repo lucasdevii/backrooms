@@ -59,8 +59,17 @@ public class Chunk
         {
             float value = Noise.DefaultNoise(chunkSeed, position.x, position.y, i);
 
-            if(value < 0.5f)
+            if(value < 0.4f)
+            {
                 pointOfConnections.Add(i);
+            }
+                
+        }
+
+        if(pointOfConnections.Count == 0)
+        {
+            int randomIndex = Mathf.FloorToInt(Noise.DefaultNoise(chunkSeed, position.x, position.y) * sizeOfChunk);
+            pointOfConnections.Add(randomIndex);
         }
         
         foreach(int point in pointOfConnections)
