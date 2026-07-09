@@ -91,27 +91,7 @@ public static class ChunkDataGenerator
         }
     }
 
-    private static void AddIfValid(List<Vector2Int> neighbors, int x, int y, int size, HashSet<string> visitedCells)
-    {
-        if (x < 0 || x >= size || y < 0 || y >= size)
-        {
-            return;
-        }
-
-        Vector2Int candidate = new Vector2Int(x, y);
-
-        if (!visitedCells.Contains(GetKey(candidate)))
-        {
-            neighbors.Add(candidate);
-        }
-    }
-
-    private static string GetKey(Vector2Int position)
-    {
-        return $"{position.x},{position.y}";
-    }
-
-    private static List<Vector2Int> GetValidNeighbors(Vector2Int cell, int size)
+   static List<Vector2Int> GetValidNeighbors(Vector2Int cell, int size)
     {
         List<Vector2Int> neighbors = new();
 
@@ -130,7 +110,7 @@ public static class ChunkDataGenerator
         return neighbors;
     }
 
-    private static void OpenPath(Vector2Int position1, Vector2Int position2, Cell[,] matrix)
+   static void OpenPath(Vector2Int position1, Vector2Int position2, Cell[,] matrix)
     {
         int dx = position2.x - position1.x;
         int dy = position2.y - position1.y;

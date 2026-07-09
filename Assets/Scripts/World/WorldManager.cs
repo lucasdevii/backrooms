@@ -25,6 +25,7 @@ public class WorldManager : MonoBehaviour
         DefinePlayerChunk();
 
         InstantiateMatrizOfChunks();
+        ConnectChunks();
     }
 
     // Update is called once per frame
@@ -65,6 +66,28 @@ public class WorldManager : MonoBehaviour
             
             currentChunkY--;
         }   
+    }
+
+    //Conecta os chunks da matriz entre si, abrindo as paredes dos chunks a direita e abaixo de cada chunk
+    void ConnectChunks()
+    {
+        for(int row = 0; row < matriz.GetLength(0); row++){
+            for(int col = 0; col < matriz.GetLength(1); col++){
+                Chunk currentChunk = matriz[row, col];
+
+                //Conecta com o chunk da direita
+                if(col + 1 < matriz.GetLength(1)){
+                    Chunk rightChunk = matriz[row, col + 1];
+                    currentChunk.ConnectWith(rightChunk, Cell.Direction.Right);
+                }
+
+                //Conecta com o chunk de baixo
+                if(row + 1 < matriz.GetLength(0)){
+                    Chunk bottomChunk = matriz[row + 1, col];
+                    currentChunk.ConnectWith(bottomChunk, Cell.Direction.Bottom);
+                }
+            }
+        }
     }
 
 }

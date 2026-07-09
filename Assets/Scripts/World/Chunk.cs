@@ -48,6 +48,37 @@ public class Chunk
         return chunkSeed;
     }
 
+    public void ConnectWith(Chunk otherChunk, Cell.Direction direction)
+    {
+        //É int pois representa apenas a coordenada do eixo X ou Y, dependendo da direção
+        List<int> pointOfConnections = new List<int>();
+        
+        int sizeOfChunk = internalGrid.GetLength(0);
+
+        for(int i = 0; i < sizeOfChunk; i++)
+        {
+            float value = Noise.DefaultNoise(chunkSeed, position.x, position.y, i);
+
+            if(value < 0.5f)
+                pointOfConnections.Add(i);
+        }
+        
+        foreach(int point in pointOfConnections)
+        {
+            if(direction == Cell.Direction.Right)
+            {
+                internalGrid[point, sizeOfChunk - 1].SetOpenedWalls(Cell.Direction.Right);
+                otherChunk.internalGrid[point, 0].SetOpenedWalls(Cell.Direction.Left);
+                break;
+            }
+            else if(direction == Cell.Direction.Bottom)
+            {
+                internalGrid[sizeOfChunk - 1, point].SetOpenedWalls(Cell.Direction.Bottom);
+                    otherChunk.internalGrid[0, point].SetOpenedWalls(Cell.Direction.Top);
+                    break;
+            }
+        }
+    }
 
     public static Vector2Int GetInitCell(ulong seed, Vector2Int chunkPosition, int matrizSize, float weight = 1)
     {
@@ -67,6 +98,7 @@ public class Chunk
             )
         );
     }
+
 
 
 }
