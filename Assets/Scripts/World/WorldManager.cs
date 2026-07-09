@@ -4,12 +4,14 @@ using UnityEngine;
 public class WorldManager : MonoBehaviour
 {
     [SerializeField] private Transform playerPosition;
-    
+
     public ulong seed = 4196283291231231231;
-    public Vector3Int playerChunk;
-    public int chunkSize = 15;
+    public Vector2Int playerChunk = new Vector2Int();
     public int renderDistance = 12;
     public Chunk[,] matriz;
+
+    //Cerca de 4 unidades de distancia em game
+    private int cellSize = 4;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,10 +24,14 @@ public class WorldManager : MonoBehaviour
         int matrizSize = (renderDistance * 2) + 1;
         matriz = new Chunk[matrizSize, matrizSize];
         
+        cellSize = matriz[0,0].GetLength(0);
+
         DefinePlayerChunk();
 
-        InstantiateMatrizOfChunks();
+        FillinMatrizOfChunks();
         ConnectChunks();
+
+        
     }
 
     // Update is called once per frame
@@ -39,11 +45,10 @@ public class WorldManager : MonoBehaviour
         if (playerPosition == null) return;
 
         playerChunk.x = Mathf.FloorToInt(playerPosition.position.x / chunkSize); 
-        playerChunk.y = Mathf.FloorToInt(playerPosition.position.y / chunkSize);
-        playerChunk.z = Mathf.FloorToInt(playerPosition.position.z / chunkSize);
+        playerChunk.y = Mathf.FloorToInt(playerPosition.position.z / chunkSize);
     }
 
-    void InstantiateMatrizOfChunks()
+    void FillinMatrizOfChunks()
     {
         //Retorna o indice de onde fica o jogador na matriz (no centro da renderização)
         int matrizCenter = matriz.GetLength(0) / 2;
@@ -85,6 +90,29 @@ public class WorldManager : MonoBehaviour
                 if(row + 1 < matriz.GetLength(0)){
                     Chunk bottomChunk = matriz[row + 1, col];
                     currentChunk.ConnectWith(bottomChunk, Cell.Direction.Bottom);
+                }
+            }
+        }
+    }
+
+    //Instancia os gameObjects das paredes e chão.
+    void InstantiateChunksInWorld()
+    {
+        for(int chunkY = 0; chunkY < matriz.GetLength(0); chunkY++)
+        {
+            for(int chunkX = 0; chunkX < matriz.GetLength(1); chunkX++)
+            {
+                //Instancia chão e teto da chunk
+                //...
+
+                for(int cellY = 0; cellY < matriz[chunkY, chunkX].GetLength(0); cellY++)
+                {
+                    for(int cellX = 0; cellX < matriz[chunkY, chunkX].GetLength(1); cellX++)
+                    {
+                        //Instancia paredes da célula
+                        //...
+                        
+                    }
                 }
             }
         }
