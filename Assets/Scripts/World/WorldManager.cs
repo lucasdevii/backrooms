@@ -8,7 +8,7 @@ public class WorldManager : MonoBehaviour
 
     public ulong seed = 4196283291231231231;
     public Vector2Int playerChunk = new Vector2Int();
-    public int renderDistance = 0;
+    public int renderDistance = 1;
     public Chunk[,] matriz;
 
     //--------------- CHUNK ----------------

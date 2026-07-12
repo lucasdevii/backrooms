@@ -72,18 +72,6 @@ public static class ChunkDataGenerator
             int selected = Mathf.FloorToInt(directionNoise * unvisited.Count);
             selected = Mathf.Clamp(selected, 0, unvisited.Count - 1);
 
-
-            Debug.Log("----------------");
-            Debug.Log(current);
-            Debug.Log("Unvisited:");
-
-            for (int i = 0; i < unvisited.Count; i++)
-                Debug.Log($"{i}: {unvisited[i]}");
-
-            Debug.Log($"loopNoise = {loopNoise}");
-            Debug.Log($"directionNoise = {directionNoise}");
-            Debug.Log($"selected = {selected}");
-
             Vector2Int next = unvisited[selected];
 
             visited.Add(next);
