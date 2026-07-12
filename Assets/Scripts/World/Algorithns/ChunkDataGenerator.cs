@@ -37,16 +37,26 @@ public static class ChunkDataGenerator
                 continue;
             }
 
-            float noise = Noise.DefaultNoise(
+            float loopNoise = Noise.DefaultNoise(
                 seed,
                 current.x,
                 current.y,
                 path.Count,
-                visited.Count
+                visited.Count,
+                17
+            );
+
+            float directionNoise = Noise.DefaultNoise(
+                seed,
+                current.x,
+                current.y,
+                path.Count,
+                visited.Count,
+                83
             );
 
             // Chance de criar uma conexão extra (loop).
-            if (visitedNeighbors.Count > 0 && noise < 0.1f)
+            if (visitedNeighbors.Count > 0 && loopNoise < 0.1f)
             {
                 int index = Mathf.FloorToInt(
                     Noise.DefaultNoise(seed, current.x, current.y, 991)
@@ -59,8 +69,20 @@ public static class ChunkDataGenerator
             }
 
             // Continua normalmente o DFS.
-            int selected = Mathf.FloorToInt(noise * unvisited.Count);
+            int selected = Mathf.FloorToInt(directionNoise * unvisited.Count);
             selected = Mathf.Clamp(selected, 0, unvisited.Count - 1);
+
+
+            Debug.Log("----------------");
+            Debug.Log(current);
+            Debug.Log("Unvisited:");
+
+            for (int i = 0; i < unvisited.Count; i++)
+                Debug.Log($"{i}: {unvisited[i]}");
+
+            Debug.Log($"loopNoise = {loopNoise}");
+            Debug.Log($"directionNoise = {directionNoise}");
+            Debug.Log($"selected = {selected}");
 
             Vector2Int next = unvisited[selected];
 

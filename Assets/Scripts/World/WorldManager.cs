@@ -15,7 +15,7 @@ public class WorldManager : MonoBehaviour
     private int chunkSize; //Tamanho de cada chunk em unidades de escala do game
 
     //-------------- CÉLULAs ---------------
-    private int cellSize = 4;
+    private int cellSize = 5;
     private int cellsQuantityInChunk = 32; 
   
 
@@ -30,6 +30,8 @@ public class WorldManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Console.WriteLine("Seed: " + seed);
+
         //Se o player n foi arrastado para o inspector, pega na cena
         if (playerPosition == null){
             playerPosition = GameObject.FindWithTag("Player").transform;
@@ -107,7 +109,7 @@ public class WorldManager : MonoBehaviour
     //Instancia os gameObjects das paredes e chão.
     void InstantiateChunksInWorld()
     {
-        int wallHeight = 3;
+        int wallHeight = 6;
 
         Vector2Int currentPlayerChunkPosition = new Vector2Int(playerChunk.x * chunkSize, playerChunk.y * chunkSize);
         

@@ -18,13 +18,14 @@ public static class Noise
 
     public static float DefaultNoise(ulong seed, params float[] values)
     {
-        float valuesMultFactor = 0;
+        ulong hash = seed;
 
-        for(int i = 0; i < values.Length; i++){
-            valuesMultFactor += values[i] * weights[i % weights.Length];
+        foreach (float value in values)
+        {
+            hash ^= (ulong)(value * 1000f);
+            hash *= 0x9E3779B97F4A7C15UL;
         }
-        
-        //Retorna um valor entre 0 e 1;
-        return (Mathf.Sin((seed * SeedWeight + valuesMultFactor)) + 1f) * 0.5f;
+
+        return (hash & 0xFFFFFFFF) / (float)uint.MaxValue;
     }
 }
