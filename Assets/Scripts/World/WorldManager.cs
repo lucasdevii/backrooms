@@ -5,7 +5,7 @@ using UnityEngine;
 public class WorldManager : MonoBehaviour
 {
     [SerializeField] private Transform playerPosition;
-
+    [SerializeField] private Wall wallPrefabScript;
     public ulong seed = 4196283291231231231;
     public Vector2Int playerChunk = new Vector2Int();
     public int renderDistance = 1;
@@ -206,23 +206,24 @@ public class WorldManager : MonoBehaviour
 
         if(!openedWalls.Contains(Cell.Direction.Right))
         {
-            GameObject rightWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            rightWall.transform.position = new Vector3(
-                cellPosition.x + (cellSize / 2), 
-                wallHeight / 2, 
-                cellPosition.y
+            Wall wall = Instantiate(wallPrefabScript);
+            wall.Inicialize(
+                new Vector2(cellPosition.x + (cellSize / 2), cellPosition.y), 
+                cellSize, 
+                wallHeight, 
+                90
             );
-            rightWall.transform.localScale = new Vector3(cellSize, wallHeight, 1);
         }
         if(!openedWalls.Contains(Cell.Direction.Bottom))
         {
-            GameObject leftWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            leftWall.transform.position = new Vector3(
-                cellPosition.x, 
-                wallHeight / 2, 
-                cellPosition.y - (cellSize / 2)
+            Wall wall = Instantiate(wallPrefabScript);
+            wall.Inicialize(
+                new Vector2(cellPosition.x, cellPosition.y - (cellSize / 2)), 
+                cellSize, 
+                wallHeight, 
+                0
             );
-            leftWall.transform.localScale = new Vector3(1, wallHeight, cellSize);
+
         }
     }
 
