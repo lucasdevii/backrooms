@@ -28,8 +28,17 @@ public class Cell
     public ulong GetChunkSeed(){
         return chunkSeed;
     }
+    public Cell GetCell()
+    {
+        return this;
+    }
+    public HashSet<Direction> GetOpenedWalls()
+    {
+        return openedWalls;
+    }
 
     public void SetOpenedWalls(Direction wall){
         openedWalls.Add(wall);
     }
+
 }

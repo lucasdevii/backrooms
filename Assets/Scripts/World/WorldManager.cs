@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldManager : MonoBehaviour
@@ -7,11 +8,24 @@ public class WorldManager : MonoBehaviour
 
     public ulong seed = 4196283291231231231;
     public Vector2Int playerChunk = new Vector2Int();
-    public int renderDistance = 12;
+    public int renderDistance = 0;
     public Chunk[,] matriz;
 
-    //Cerca de 4 unidades de distancia em game
+    //--------------- CHUNK ----------------
+    private int chunkSize; //Tamanho de cada chunk em unidades de escala do game
+
+    //-------------- CÉLULAs ---------------
     private int cellSize = 4;
+    private int cellsQuantityInChunk = 32; 
+  
+
+    void Awake()
+    {
+        int matrizSize = (renderDistance * 2) + 1;
+        
+        chunkSize = cellSize * cellsQuantityInChunk;
+        matriz = new Chunk[matrizSize, matrizSize];
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,17 +35,12 @@ public class WorldManager : MonoBehaviour
             playerPosition = GameObject.FindWithTag("Player").transform;
         }
 
-        int matrizSize = (renderDistance * 2) + 1;
-        matriz = new Chunk[matrizSize, matrizSize];
-        
-        cellSize = matriz[0,0].GetLength(0);
-
         DefinePlayerChunk();
 
         FillinMatrizOfChunks();
         ConnectChunks();
 
-        
+        InstantiateChunksInWorld();
     }
 
     // Update is called once per frame
@@ -55,7 +64,7 @@ public class WorldManager : MonoBehaviour
         
         //Começa com as coordenadas do chunk superior esquerdo
         int initialChunkX = playerChunk.x - matrizCenter;
-        int initialChunkY = playerChunk.z + matrizCenter;
+        int initialChunkY = playerChunk.y + matrizCenter;
 
         int currentChunkY = initialChunkY;
         
@@ -64,7 +73,7 @@ public class WorldManager : MonoBehaviour
             int currentChunkX = initialChunkX;
 
             for(int col = 0; col < matriz.GetLength(1); col++){
-                matriz[row, col] = new Chunk(seed, currentChunkX, currentChunkY);
+                matriz[row, col] = new Chunk(seed, currentChunkX, currentChunkY, cellsQuantityInChunk);
 
                 currentChunkX++;
             }
@@ -98,23 +107,120 @@ public class WorldManager : MonoBehaviour
     //Instancia os gameObjects das paredes e chão.
     void InstantiateChunksInWorld()
     {
+        int wallHeight = 3;
+
+        Vector2Int currentPlayerChunkPosition = new Vector2Int(playerChunk.x * chunkSize, playerChunk.y * chunkSize);
+        
+        Vector2 initChunkPosition = new Vector2(
+            currentPlayerChunkPosition.x - (chunkSize * renderDistance), 
+            currentPlayerChunkPosition.y + (chunkSize * renderDistance)
+        );
+
+        //Começa no canto superior esquerdo da matriz, levando em consideração o canto superior da chunk
+        Vector2 currentChunkOrigin = new Vector2(initChunkPosition.x, initChunkPosition.y);
+
+        //Tamanho geral do chão e teto da chunk, que é o mesmo tamanho da chunk, mas com altura 1
+        Vector3 groundAndCeilingSize = new Vector3(chunkSize, 1, chunkSize);
+        
         for(int chunkY = 0; chunkY < matriz.GetLength(0); chunkY++)
         {
             for(int chunkX = 0; chunkX < matriz.GetLength(1); chunkX++)
             {
-                //Instancia chão e teto da chunk
-                //...
+                //Cria o chão no tamanho da chunk, e o teto no mesmo tamanho, mas na altura da chunk
+                GroundAndCeilingInstance(currentChunkOrigin, groundAndCeilingSize, wallHeight);
 
-                for(int cellY = 0; cellY < matriz[chunkY, chunkX].GetLength(0); cellY++)
+                Chunk chunk = matriz[chunkY, chunkX];
+
+                for(int cellY = 0; cellY < cellsQuantityInChunk; cellY++)
                 {
-                    for(int cellX = 0; cellX < matriz[chunkY, chunkX].GetLength(1); cellX++)
+
+
+                    for(int cellX = 0; cellX < cellsQuantityInChunk; cellX++)
                     {
+                        //Pega a matriz de células do chunk atual                    
+                        Vector2 cellPosition = new Vector2(
+                            currentChunkOrigin.x + cellX * cellSize, 
+                            currentChunkOrigin.y - cellY * cellSize
+                        );
+
+                        Cell cell = chunk.GetCell(cellX, cellY);
+
                         //Instancia paredes da célula
-                        //...
-                        
+                        WallsInstance(cellPosition, cell, wallHeight);
+
                     }
                 }
+
+                currentChunkOrigin.x += chunkSize;
             }
+
+            currentChunkOrigin.x = initChunkPosition.x;
+            currentChunkOrigin.y -= chunkSize;
+        }
+    }
+
+    void GroundAndCeilingInstance(
+        Vector2 currentChunkOrigin, 
+        Vector3 groundAndCeilingSize, 
+        int wallHeight
+    )
+    {
+        float midOfChunk = chunkSize / 2;
+
+        GameObject ground = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        ground.transform.position = new Vector3(
+            currentChunkOrigin.x + midOfChunk, 
+            0, 
+            currentChunkOrigin.y - midOfChunk
+        );
+        //Escala o chão e teto da chunk para o tamanho da chunk, mas com altura 1
+        ground.transform.localScale = new Vector3(
+            groundAndCeilingSize.x, 
+            groundAndCeilingSize.y, 
+            groundAndCeilingSize.z
+        );
+
+        //Instancia chão e teto da chunk
+        GameObject ceiling = Instantiate(ground);
+        ceiling.transform.position = new Vector3(
+            currentChunkOrigin.x + midOfChunk, 
+            wallHeight, 
+            currentChunkOrigin.y - midOfChunk
+        );
+        ceiling.transform.localScale = new Vector3(
+            groundAndCeilingSize.x, 
+            groundAndCeilingSize.y, 
+            groundAndCeilingSize.z
+        );
+    }
+
+    void WallsInstance(
+        Vector2 cellPosition, 
+        Cell cell,
+        int wallHeight
+    )
+    {
+        HashSet<Cell.Direction> openedWalls = cell.GetOpenedWalls();
+
+        if(!openedWalls.Contains(Cell.Direction.Right))
+        {
+            GameObject rightWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            rightWall.transform.position = new Vector3(
+                cellPosition.x + (cellSize / 2), 
+                wallHeight / 2, 
+                cellPosition.y
+            );
+            rightWall.transform.localScale = new Vector3(cellSize, wallHeight, 1);
+        }
+        if(!openedWalls.Contains(Cell.Direction.Bottom))
+        {
+            GameObject leftWall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            leftWall.transform.position = new Vector3(
+                cellPosition.x, 
+                wallHeight / 2, 
+                cellPosition.y - (cellSize / 2)
+            );
+            leftWall.transform.localScale = new Vector3(1, wallHeight, cellSize);
         }
     }
 

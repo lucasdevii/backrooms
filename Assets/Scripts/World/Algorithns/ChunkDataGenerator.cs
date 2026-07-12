@@ -30,7 +30,7 @@ public static class ChunkDataGenerator
                     unvisited.Add(neighbor);
             }
 
-            // Não há mais células novas para explorar.
+            // Não existem mais caminhos para seguir.
             if (unvisited.Count == 0)
             {
                 path.Pop();
@@ -45,9 +45,7 @@ public static class ChunkDataGenerator
                 visited.Count
             );
 
-            Vector2Int next;
-
-            // Pequena chance de criar um loop.
+            // Chance de criar uma conexão extra (loop).
             if (visitedNeighbors.Count > 0 && noise < 0.1f)
             {
                 int index = Mathf.FloorToInt(
@@ -57,18 +55,14 @@ public static class ChunkDataGenerator
 
                 index = Mathf.Clamp(index, 0, visitedNeighbors.Count - 1);
 
-                next = visitedNeighbors[index];
-
-                OpenPath(current, next, matrix);
-
-                // Continua explorando a partir da célula atual.
-                continue;
+                OpenPath(current, visitedNeighbors[index], matrix);
             }
 
+            // Continua normalmente o DFS.
             int selected = Mathf.FloorToInt(noise * unvisited.Count);
             selected = Mathf.Clamp(selected, 0, unvisited.Count - 1);
 
-            next = unvisited[selected];
+            Vector2Int next = unvisited[selected];
 
             visited.Add(next);
             path.Push(next);

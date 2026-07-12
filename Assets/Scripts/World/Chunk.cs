@@ -9,15 +9,16 @@ public class Chunk
     // Removido o 'private' e adicionado 'public' com 'protected set'
     public ulong worldSeed { get; protected set; }
     public ulong chunkSeed { get; protected set; } 
-    public int cellsQuantity { get; protected set; } = 32; // Também transformada em propriedade de leitura
+    public int cellsQuantity { get; protected set; } // Também transformada em propriedade de leitura
     public Vector2Int position { get; protected set; }
     public Cell[,] internalGrid; 
 
-    public Chunk(ulong worldSeed, int chunkX, int chunkZ)
+    public Chunk(ulong worldSeed, int chunkX, int chunkZ, int cellsQuantity)
     {
         position = new Vector2Int(chunkX, chunkZ);
 
         this.worldSeed = worldSeed;
+        this.cellsQuantity = cellsQuantity;
         internalGrid = new Cell[cellsQuantity, cellsQuantity];
 
         chunkSeed = GenerateChunkSeed();
@@ -108,7 +109,20 @@ public class Chunk
         );
     }
 
+    public Cell[,] GetData()
+    {
+        return internalGrid;
+    }
 
+    public Cell GetCell(int row, int col)
+    {
+        if(row < 0 || row >= cellsQuantity || col < 0 || col >= cellsQuantity)
+        {
+            throw new ArgumentOutOfRangeException("A coluna ou linha da celula não existe");
+        }
+
+        return internalGrid[row, col].GetCell();
+    }
 
 }
 // -------------- IDEIA ---------------
