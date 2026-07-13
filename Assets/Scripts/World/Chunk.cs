@@ -12,6 +12,7 @@ public class Chunk
     public int cellsQuantity { get; protected set; } // Também transformada em propriedade de leitura
     public Vector2Int position { get; protected set; }
     public Cell[,] internalGrid; 
+    private GameObject chunkGameObject; // Referência ao GameObject do chunk na cena
 
     public Chunk(ulong worldSeed, int chunkX, int chunkZ, int cellsQuantity)
     {
@@ -49,7 +50,7 @@ public class Chunk
         return chunkSeed;
     }
 
-    public void ConnectWith(Chunk otherChunk, Cell.Direction direction)
+    public void ConnectWith(Chunk otherChunk, WorldManager.Direction direction)
     {
         //É int pois representa apenas a coordenada do eixo X ou Y, dependendo da direção
         List<int> pointOfConnections = new List<int>();
@@ -75,16 +76,16 @@ public class Chunk
         
         foreach(int point in pointOfConnections)
         {
-            if(direction == Cell.Direction.Right)
+            if(direction == WorldManager.Direction.Right)
             {
-                internalGrid[point, sizeOfChunk - 1].SetOpenedWalls(Cell.Direction.Right);
-                otherChunk.internalGrid[point, 0].SetOpenedWalls(Cell.Direction.Left);
+                internalGrid[point, sizeOfChunk - 1].SetOpenedWalls(WorldManager.Direction.Right);
+                otherChunk.internalGrid[point, 0].SetOpenedWalls(WorldManager.Direction.Left);
                 break;
             }
-            else if(direction == Cell.Direction.Bottom)
+            else if(direction == WorldManager.Direction.Bottom)
             {
-                internalGrid[sizeOfChunk - 1, point].SetOpenedWalls(Cell.Direction.Bottom);
-                    otherChunk.internalGrid[0, point].SetOpenedWalls(Cell.Direction.Top);
+                internalGrid[sizeOfChunk - 1, point].SetOpenedWalls(WorldManager.Direction.Bottom);
+                    otherChunk.internalGrid[0, point].SetOpenedWalls(WorldManager.Direction.Top);
                     break;
             }
         }
@@ -122,6 +123,16 @@ public class Chunk
         }
 
         return internalGrid[row, col].GetCell();
+    }
+
+    public void SetChunkGameObject(GameObject chunkGameObject)
+    {
+        this.chunkGameObject = chunkGameObject;
+    }
+
+    public GameObject GetChunkGameObject()
+    {
+        return chunkGameObject;
     }
 
 }

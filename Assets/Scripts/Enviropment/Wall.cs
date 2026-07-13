@@ -4,6 +4,7 @@ public class Wall : MonoBehaviour
 {
     Vector2 size = new Vector3();
     Vector2 Position = new Vector3();
+    private float thickness = 1f;
 
     public void SetPosition(Vector2 position)
     {
@@ -13,8 +14,9 @@ public class Wall : MonoBehaviour
 
     public void SetSize(float width, float height)
     {
+
         size = new Vector2(width, height);
-        transform.localScale = new Vector3(size.x, size.y, 1);
+        transform.localScale = new Vector3(size.x, size.y, thickness);
     }
 
     public void SetRotation(float angle)

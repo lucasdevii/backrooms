@@ -3,21 +3,14 @@ using UnityEngine;
 
 public class Cell
 {
-    public enum Direction { 
-        Top, 
-        Left, 
-        Right, 
-        Bottom 
-    }
-
     private ulong chunkSeed;
     private Vector2Int position;
-    private HashSet<Direction> openedWalls;
+    private HashSet<WorldManager.Direction> openedWalls;
     
     public Cell(ulong chunkSeed, int row, int col)
     {
         this.chunkSeed = chunkSeed;
-        openedWalls = new HashSet<Direction>();
+        openedWalls = new HashSet<WorldManager.Direction>();
         position.x = col;
         position.y = row;
     }
@@ -32,12 +25,12 @@ public class Cell
     {
         return this;
     }
-    public HashSet<Direction> GetOpenedWalls()
+    public HashSet<WorldManager.Direction> GetOpenedWalls()
     {
         return openedWalls;
     }
 
-    public void SetOpenedWalls(Direction wall){
+    public void SetOpenedWalls(WorldManager.Direction wall){
         openedWalls.Add(wall);
     }
 
