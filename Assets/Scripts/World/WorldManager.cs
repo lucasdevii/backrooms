@@ -23,7 +23,7 @@ public class WorldManager : MonoBehaviour
 
     //-------------- CÉLULAs ---------------
     private int cellSize = 5;
-    private int cellsQuantityInChunk = 32; 
+    static public int cellsQuantityInChunk = 32; 
 
     private int wallHeight = 6;
     private Vector3 groundAndCeilingSize;
@@ -59,11 +59,18 @@ public class WorldManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DefinePlayerChunk();
+        VerifyIfChunkChange();
     }
-    
+
     void DefinePlayerChunk()
     {
+        playerChunk.x = Mathf.FloorToInt(playerPosition.position.x / chunkSize);
+        playerChunk.y = Mathf.FloorToInt(playerPosition.position.z / chunkSize);
+    }
+    
+    void VerifyIfChunkChange()
+    {
+        
         if (playerPosition == null) return;
 
         Vector2Int currentChunkPosition = new Vector2Int(
@@ -73,6 +80,7 @@ public class WorldManager : MonoBehaviour
 
         if(currentChunkPosition != playerChunk)
         {
+            Debug.Log($"Mudou de chunk | current chunk: {currentChunkPosition.x}, {currentChunkPosition.y} | ");
             //A variação em x e y do chunk do player, para saber quais chunks carregar e quais chunks remover
             int dx = playerChunk.x - currentChunkPosition.x;
             int dy = playerChunk.y - currentChunkPosition.y;
@@ -82,6 +90,7 @@ public class WorldManager : MonoBehaviour
 
         playerChunk.x = currentChunkPosition.x; 
         playerChunk.y = currentChunkPosition.y;
+
     }
 
     void FillinMatrizOfChunks()
@@ -100,7 +109,7 @@ public class WorldManager : MonoBehaviour
             int currentChunkX = initialChunkX;
 
             for(int col = 0; col < matriz.GetLength(1); col++){
-                matriz[row, col] = new Chunk(seed, currentChunkX, currentChunkY, cellsQuantityInChunk);
+                matriz[row, col] = new Chunk(seed, currentChunkX, currentChunkY);
 
                 currentChunkX++;
             }
@@ -132,57 +141,15 @@ public class WorldManager : MonoBehaviour
     }
 
     //Instancia os gameObjects das paredes e chão.
+
     void InstantiateChunksInWorld()
     {
-
-
-        Vector2Int currentPlayerChunkPosition = new Vector2Int(playerChunk.x * chunkSize, playerChunk.y * chunkSize);
-        
-        Vector2 initChunkPosition = new Vector2(
-            currentPlayerChunkPosition.x - (chunkSize * renderDistance), 
-            currentPlayerChunkPosition.y + (chunkSize * renderDistance)
-        );
-
-        //Começa no canto superior esquerdo da matriz, levando em consideração o canto superior da chunk
-        Vector2 currentChunkOrigin = new Vector2(initChunkPosition.x, initChunkPosition.y);
-        
-        for(int chunkY = 0; chunkY < matriz.GetLength(0); chunkY++)
+        for (int row = 0; row < matriz.GetLength(0); row++)
         {
-            for(int chunkX = 0; chunkX < matriz.GetLength(1); chunkX++)
+            for (int col = 0; col < matriz.GetLength(1); col++)
             {
-
-                Chunk chunk = matriz[chunkY, chunkX];
-
-                GameObject chunkObject = new GameObject($"Chunk {chunkX}, {chunkY}");
-
-                chunk.SetChunkGameObject(chunkObject);
-
-                //Cria o chão no tamanho da chunk, e o teto no mesmo tamanho, mas na altura da chunk
-                GroundAndCeilingInstance(currentChunkOrigin, chunkObject);
-
-                for(int cellY = 0; cellY < cellsQuantityInChunk; cellY++)
-                {
-                    for(int cellX = 0; cellX < cellsQuantityInChunk; cellX++)
-                    {
-                        //Pega a matriz de células do chunk atual                    
-                        Vector2 cellPosition = new Vector2(
-                            currentChunkOrigin.x + cellX * cellSize, 
-                            currentChunkOrigin.y - cellY * cellSize
-                        );
-
-                        Cell cell = chunk.GetCell(cellX, cellY);
-
-                        //Instancia paredes da célula
-                        WallsInstance(cellPosition, cell, chunkObject);
-
-                    }
-                }
-
-                currentChunkOrigin.x += chunkSize;
+                RenderChunk(matriz[row, col]);
             }
-
-            currentChunkOrigin.x = initChunkPosition.x;
-            currentChunkOrigin.y -= chunkSize;
         }
     }
 
@@ -258,38 +225,39 @@ public class WorldManager : MonoBehaviour
     {
         if(dx > 0) //Player se moveu para a esquerda
         {
-            DestroyChunksInWorld(Direction.Left);
-            ChunkDataGenerator.WalkingForTheLeftChunk(matriz, seed, newPlayerChunk, renderDistance, cellsQuantityInChunk);
+            DestroyChunksInWorld(Direction.Right);
+            ChunkDataGenerator.WalkingForTheRightChunk(matriz, seed);
             InstantiateNewChunksInWorld(Direction.Left);
         }
         else if(dx < 0) //Player se moveu para a direita
         {
-            DestroyChunksInWorld(Direction.Right);
-            ChunkDataGenerator.WalkingForTheRightChunk(matriz, seed, newPlayerChunk, renderDistance, cellsQuantityInChunk);
+            DestroyChunksInWorld(Direction.Left);
+            ChunkDataGenerator.WalkingForTheLeftChunk(matriz, seed);
             InstantiateNewChunksInWorld(Direction.Right);
         }
         if(dy > 0) //Player se moveu para baixo
         {
-            DestroyChunksInWorld(Direction.Bottom);
-            ChunkDataGenerator.WalkingForTheBottomChunk(matriz, seed, newPlayerChunk, renderDistance, cellsQuantityInChunk);
+            DestroyChunksInWorld(Direction.Top);
+            ChunkDataGenerator.WalkingForTheTopChunk(matriz, seed);
             InstantiateNewChunksInWorld(Direction.Bottom);
         }
         else if(dy < 0) //Player se moveu para cima
         {
-            DestroyChunksInWorld(Direction.Top);
-            ChunkDataGenerator.WalkingForTheTopChunk(matriz, seed, newPlayerChunk, renderDistance, cellsQuantityInChunk);
+            DestroyChunksInWorld(Direction.Bottom);
+            ChunkDataGenerator.WalkingForTheBottomChunk(matriz, seed);
             InstantiateNewChunksInWorld(Direction.Top);
         }
     }
 
     void DestroyChunksInWorld(Direction direction)
     {
+        
         if(direction == Direction.Left)
         {
             for(int row = 0; row < matriz.GetLength(0); row++)
             {
                 Chunk chunk = matriz[row, 0];
-
+                Debug.Log($"Renderizando chunk {chunk.position}");
                 Destroy(chunk.GetChunkGameObject());
             }
         }
@@ -298,7 +266,7 @@ public class WorldManager : MonoBehaviour
             for(int row = 0; row < matriz.GetLength(0); row++)
             {
                 Chunk chunk = matriz[row, matriz.GetLength(1) - 1];
-
+                Debug.Log($"Renderizando chunk {chunk.position}");
                 Destroy(chunk.GetChunkGameObject());
             }
         }
@@ -307,7 +275,7 @@ public class WorldManager : MonoBehaviour
             for(int col = 0; col < matriz.GetLength(1); col++)
             {
                 Chunk chunk = matriz[0, col];
-
+                Debug.Log($"Renderizando chunk {chunk.position}");
                 Destroy(chunk.GetChunkGameObject());
             }
         }
@@ -316,7 +284,7 @@ public class WorldManager : MonoBehaviour
             for(int col = 0; col < matriz.GetLength(1); col++)
             {
                 Chunk chunk = matriz[matriz.GetLength(0) - 1, col];
-
+                Debug.Log($"Renderizando chunk {chunk.position}");
                 Destroy(chunk.GetChunkGameObject());
             }
         }

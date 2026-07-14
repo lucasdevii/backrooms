@@ -14,12 +14,12 @@ public class Chunk
     public Cell[,] internalGrid; 
     private GameObject chunkGameObject; // Referência ao GameObject do chunk na cena
 
-    public Chunk(ulong worldSeed, int chunkX, int chunkZ, int cellsQuantity)
+    public Chunk(ulong worldSeed, int chunkX, int chunkZ)
     {
         position = new Vector2Int(chunkX, chunkZ);
 
         this.worldSeed = worldSeed;
-        this.cellsQuantity = cellsQuantity;
+        this.cellsQuantity = WorldManager.cellsQuantityInChunk;
         internalGrid = new Cell[cellsQuantity, cellsQuantity];
 
         chunkSeed = GenerateChunkSeed();

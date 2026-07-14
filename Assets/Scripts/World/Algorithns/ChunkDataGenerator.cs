@@ -95,7 +95,7 @@ public static class ChunkDataGenerator
         }
     }
 
-   static List<Vector2Int> GetValidNeighbors(Vector2Int cell, int size)
+    static List<Vector2Int> GetValidNeighbors(Vector2Int cell, int size)
     {
         List<Vector2Int> neighbors = new();
 
@@ -114,7 +114,7 @@ public static class ChunkDataGenerator
         return neighbors;
     }
 
-   static void OpenPath(Vector2Int position1, Vector2Int position2, Cell[,] matrix)
+    static void OpenPath(Vector2Int position1, Vector2Int position2, Cell[,] matrix)
     {
         int dx = position2.x - position1.x;
         int dy = position2.y - position1.y;
@@ -140,65 +140,105 @@ public static class ChunkDataGenerator
             matrix[position2.y, position2.x].SetOpenedWalls(WorldManager.Direction.Top);
         }
     }
-    public static void WalkingForTheLeftChunk(Chunk[,] matriz, ulong seed, Vector2Int playerChunk, int renderDistance, int cellsQuantityInChunk)
+
+
+    public static void WalkingForTheLeftChunk(Chunk[,] matriz, ulong seed)
     {
-        for(int row = 0; row < matriz.GetLength(0); row++)
+        // Desloca tudo para a esquerda
+        for (int row = 0; row < matriz.GetLength(0); row++)
         {
-            for(int col = 1; col < matriz.GetLength(1); col++)
+            for (int col = 1; col < matriz.GetLength(1); col++)
             {
                 matriz[row, col - 1] = matriz[row, col];
             }
         }
 
-        for(int row = 0; row < matriz.GetLength(0); row++)
+        // Cria nova coluna na direita
+        for (int row = 0; row < matriz.GetLength(0); row++)
         {
-            matriz[row, matriz.GetLength(1) - 1] = new Chunk(seed, playerChunk.x - renderDistance, playerChunk.y - renderDistance + row, cellsQuantityInChunk);
+            Chunk reference = matriz[row, matriz.GetLength(1) - 2];
+
+            matriz[row, matriz.GetLength(1) - 1] =
+                new Chunk(
+                    seed,
+                    reference.position.x + 1,
+                    reference.position.y
+                );
         }
     }
-    public static void WalkingForTheRightChunk(Chunk[,] matriz, ulong seed, Vector2Int playerChunk, int renderDistance, int cellsQuantityInChunk)
+
+    public static void WalkingForTheRightChunk(Chunk[,] matriz, ulong seed)
     {
-        for(int row = 0; row < matriz.GetLength(0); row++)
+        // Desloca tudo para a direita
+        for (int row = 0; row < matriz.GetLength(0); row++)
         {
-            for(int col = matriz.GetLength(1) - 2; col >= 0; col--)
+            for (int col = matriz.GetLength(1) - 2; col >= 0; col--)
             {
                 matriz[row, col + 1] = matriz[row, col];
             }
         }
 
-        for(int row = 0; row < matriz.GetLength(0); row++)
+        // Cria nova coluna na esquerda
+        for (int row = 0; row < matriz.GetLength(0); row++)
         {
-            matriz[row, 0] = new Chunk(seed, playerChunk.x + renderDistance, playerChunk.y - renderDistance + row, cellsQuantityInChunk);
+            Chunk reference = matriz[row, 1];
+
+            matriz[row, 0] =
+                new Chunk(
+                    seed,
+                    reference.position.x - 1,
+                    reference.position.y
+                );
         }
     }
-    public static void WalkingForTheTopChunk(Chunk[,] matriz, ulong seed, Vector2Int playerChunk, int renderDistance, int cellsQuantityInChunk)
+
+    public static void WalkingForTheTopChunk(Chunk[,] matriz, ulong seed)
     {
-        for(int row = 1; row < matriz.GetLength(0); row++)
+        // Desloca tudo para cima
+        for (int row = 1; row < matriz.GetLength(0); row++)
         {
-            for(int col = 0; col < matriz.GetLength(1); col++)
+            for (int col = 0; col < matriz.GetLength(1); col++)
             {
                 matriz[row - 1, col] = matriz[row, col];
             }
         }
 
-        for(int col = 0; col < matriz.GetLength(1); col++)
+        // Cria nova linha embaixo
+        for (int col = 0; col < matriz.GetLength(1); col++)
         {
-            matriz[matriz.GetLength(0) - 1, col] = new Chunk(seed, playerChunk.x - renderDistance + col, playerChunk.y - renderDistance, cellsQuantityInChunk);
+            Chunk reference = matriz[matriz.GetLength(0) - 2, col];
+
+            matriz[matriz.GetLength(0) - 1, col] =
+                new Chunk(
+                    seed,
+                    reference.position.x,
+                    reference.position.y - 1
+                );
         }
-        
     }
-    public static void WalkingForTheBottomChunk(Chunk[,] matriz, ulong seed, Vector2Int playerChunk, int renderDistance, int cellsQuantityInChunk)
+
+    public static void WalkingForTheBottomChunk(Chunk[,] matriz, ulong seed)
     {
-        for(int row = matriz.GetLength(0) - 2; row >= 0; row--)
+        // Desloca tudo para baixo
+        for (int row = matriz.GetLength(0) - 2; row >= 0; row--)
         {
-            for(int col = 0; col < matriz.GetLength(1); col++)
+            for (int col = 0; col < matriz.GetLength(1); col++)
             {
                 matriz[row + 1, col] = matriz[row, col];
             }
         }
-        
-        for(int col = 0; col < matriz.GetLength(1); col++)
+
+        // Cria nova linha em cima
+        for (int col = 0; col < matriz.GetLength(1); col++)
         {
-            matriz[0, col] = new Chunk(seed, playerChunk.x - renderDistance + col, playerChunk.y + renderDistance, cellsQuantityInChunk);
+            Chunk reference = matriz[1, col];
+
+            matriz[0, col] =
+                new Chunk(
+                    seed,
+                    reference.position.x,
+                    reference.position.y + 1
+                );
         }
     }
 }
