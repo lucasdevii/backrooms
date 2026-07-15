@@ -4,7 +4,7 @@ public class Wall : MonoBehaviour
 {
     Vector2 size = new Vector3();
     Vector2 Position = new Vector3();
-    private float thickness = 1f;
+    static public float thickness = 1f;
 
     public void SetPosition(Vector2 position)
     {

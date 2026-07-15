@@ -49,15 +49,20 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.3.10f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\World\Chunk\Cell.cs" />
+    <Compile Include="Assets\Scripts\World\Chunk\Chunk.cs" />
+    <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\LampsRender.cs" />
+    <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\ChunkRender.cs" />
     <Compile Include="Assets\Scripts\Enviropment\Wall.cs" />
     <Compile Include="Assets\Scripts\Camera\MainCamera.cs" />
-    <Compile Include="Assets\Scripts\World\Cell.cs" />
-    <Compile Include="Assets\Scripts\World\Chunk.cs" />
+    <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Data\ChunkDataGenerator.cs" />
+    <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\GroundRender.cs" />
+    <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\WallsRender.cs" />
     <Compile Include="Assets\Scripts\Generation.cs\Noise.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
-    <Compile Include="Assets\Scripts\World\Algorithns\ChunkDataGenerator.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\World\WorldManager.cs" />
+    <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\CeilingRender.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

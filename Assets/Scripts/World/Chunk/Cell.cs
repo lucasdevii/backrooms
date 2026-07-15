@@ -33,5 +33,4 @@ public class Cell
     public void SetOpenedWalls(WorldManager.Direction wall){
         openedWalls.Add(wall);
     }
-
 }

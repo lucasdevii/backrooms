@@ -350,4 +350,10 @@ public class WorldManager : MonoBehaviour
             }
         }
     }
+
+    //Função para fechar os espaçamentos que aparece entre celulas diagonais, na conexão entre direita e baixo
+    // public Cell GetDiagonalCell(Chunk chunk, Vector2 position)
+    // {
+        
+    // }
 }

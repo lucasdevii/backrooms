@@ -134,7 +134,6 @@ public class Chunk
     {
         return chunkGameObject;
     }
-
 }
 // -------------- IDEIA ---------------
 // Chunk
