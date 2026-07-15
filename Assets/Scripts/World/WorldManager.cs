@@ -22,10 +22,10 @@ public class WorldManager : MonoBehaviour
     private int chunkSize; //Tamanho de cada chunk em unidades de escala do game
 
     //-------------- CÉLULAs ---------------
-    private int cellSize = 5;
-    static public int cellsQuantityInChunk = 32; 
+    private static int cellSize = 5;
+    public static int cellsQuantityInChunk = 32; 
 
-    private int wallHeight = 6;
+    public static int wallHeight = 6;
     private Vector3 groundAndCeilingSize;
   
 
@@ -50,8 +50,8 @@ public class WorldManager : MonoBehaviour
 
         DefinePlayerChunk();
 
-        FillinMatrizOfChunks();
-        ConnectChunks();
+        FillInMatrizOfChunks();
+        ChunkRender.ConnectChunks(matriz);
 
         InstantiateChunksInWorld();
     }
@@ -93,7 +93,7 @@ public class WorldManager : MonoBehaviour
 
     }
 
-    void FillinMatrizOfChunks()
+    void FillInMatrizOfChunks()
     {
         //Retorna o indice de onde fica o jogador na matriz (no centro da renderização)
         int matrizCenter = matriz.GetLength(0) / 2;
@@ -117,110 +117,25 @@ public class WorldManager : MonoBehaviour
             currentChunkY--;
         }   
     }
-
-    //Conecta os chunks da matriz entre si, abrindo as paredes dos chunks a direita e abaixo de cada chunk
-    void ConnectChunks()
-    {
-        for(int row = 0; row < matriz.GetLength(0); row++){
-            for(int col = 0; col < matriz.GetLength(1); col++){
-                Chunk currentChunk = matriz[row, col];
-
-                //Conecta com o chunk da direita
-                if(col + 1 < matriz.GetLength(1)){
-                    Chunk rightChunk = matriz[row, col + 1];
-                    currentChunk.ConnectWith(rightChunk, Direction.Right);
-                }
-
-                //Conecta com o chunk de baixo
-                if(row + 1 < matriz.GetLength(0)){
-                    Chunk bottomChunk = matriz[row + 1, col];
-                    currentChunk.ConnectWith(bottomChunk, Direction.Bottom);
-                }
-            }
-        }
-    }
-
-    //Instancia os gameObjects das paredes e chão.
-
+    
     void InstantiateChunksInWorld()
     {
         for (int row = 0; row < matriz.GetLength(0); row++)
         {
             for (int col = 0; col < matriz.GetLength(1); col++)
             {
-                RenderChunk(matriz[row, col]);
+                ChunkRender.Render(
+                    matriz[row, col],
+                    wallPrefabScript,
+                    cellSize,
+                    chunkSize,
+                    wallHeight,
+                    groundAndCeilingSize
+                );
             }
         }
     }
 
-    void GroundAndCeilingInstance(
-        Vector2 currentChunkOrigin, 
-        GameObject chunkObject
-    )
-    {
-        float midOfChunk = chunkSize / 2;
-
-        //Instancia chão da chunk
-        GameObject ground = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        ground.transform.position = new Vector3(
-            currentChunkOrigin.x + midOfChunk, 
-            0, 
-            currentChunkOrigin.y - midOfChunk
-        );
-        ground.transform.localScale = new Vector3(
-            groundAndCeilingSize.x, 
-            groundAndCeilingSize.y, 
-            groundAndCeilingSize.z
-        );
-        ground.transform.SetParent(chunkObject.transform);
-
-        //Instancia teto da chunk
-        GameObject ceiling = Instantiate(ground, chunkObject.transform);
-        ceiling.transform.position = new Vector3(
-            currentChunkOrigin.x + midOfChunk, 
-            wallHeight, 
-            currentChunkOrigin.y - midOfChunk
-        );
-        ceiling.transform.localScale = new Vector3(
-            groundAndCeilingSize.x, 
-            groundAndCeilingSize.y, 
-            groundAndCeilingSize.z
-        );
-    }
-
-    void WallsInstance(
-        Vector2 cellPosition, 
-        Cell cell,
-        GameObject chunkObjectFather
-    )
-    {
-        HashSet<Direction> openedWalls = cell.GetOpenedWalls();
-
-        if(!openedWalls.Contains(Direction.Right))
-        {
-            //Deixa as paredes como filhas do gameObject do chunk, para melhor organização na hierarquia
-            Wall wall = Instantiate(wallPrefabScript, chunkObjectFather.transform);
-
-            wall.Inicialize(
-                new Vector2(cellPosition.x + (cellSize / 2), cellPosition.y), 
-                cellSize, 
-                wallHeight, 
-                90
-            );
-        }
-        if(!openedWalls.Contains(Direction.Bottom))
-        {
-            Wall wall = Instantiate(wallPrefabScript, chunkObjectFather.transform);
-            
-            wall.Inicialize(
-                new Vector2(cellPosition.x, cellPosition.y - (cellSize / 2)), 
-                cellSize, 
-                wallHeight, 
-                0
-            );
-
-        }
-    }
     void LoadNewChunks(Vector2Int newPlayerChunk, int dx, int dy)
     {
         if(dx > 0) //Player se moveu para a esquerda
@@ -295,65 +210,54 @@ public class WorldManager : MonoBehaviour
         if (direction == Direction.Left)
         {
             for (int row = 0; row < matriz.GetLength(0); row++)
-                RenderChunk(matriz[row, 0]);
+                ChunkRender.Render(
+                    matriz[row, 0],
+                    wallPrefabScript,
+                    cellSize,
+                    chunkSize,
+                    wallHeight,
+                    groundAndCeilingSize
+                );
         }
         else if (direction == Direction.Right)
         {
             int lastCol = matriz.GetLength(1) - 1;
 
             for (int row = 0; row < matriz.GetLength(0); row++)
-                RenderChunk(matriz[row, lastCol]);
+                ChunkRender.Render(
+                    matriz[row, lastCol],
+                    wallPrefabScript,
+                    cellSize,
+                    chunkSize,
+                    wallHeight,
+                    groundAndCeilingSize
+                );
         }
         else if (direction == Direction.Top)
         {
             for (int col = 0; col < matriz.GetLength(1); col++)
-                RenderChunk(matriz[0, col]);
+                ChunkRender.Render(
+                    matriz[0, col],
+                    wallPrefabScript,
+                    cellSize,
+                    chunkSize,
+                    wallHeight,
+                    groundAndCeilingSize
+                );
         }
         else if (direction == Direction.Bottom)
         {
             int lastRow = matriz.GetLength(0) - 1;
 
             for (int col = 0; col < matriz.GetLength(1); col++)
-                RenderChunk(matriz[lastRow, col]);
+                ChunkRender.Render(
+                    matriz[lastRow, col],
+                    wallPrefabScript,
+                    cellSize,
+                    chunkSize,
+                    wallHeight,
+                    groundAndCeilingSize
+                );
         }
     }
-
-    void RenderChunk(Chunk chunk)
-    {
-        // Canto superior esquerdo do chunk
-        Vector2 chunkOrigin = new Vector2(
-            chunk.position.x * chunkSize,
-            chunk.position.y * chunkSize + chunkSize
-        );
-
-        GameObject chunkObject = new GameObject($"Chunk {chunk.position.x}, {chunk.position.y}");
-
-        GroundAndCeilingInstance(chunkOrigin, chunkObject);
-
-        // Se adicionou um campo GameObject na classe Chunk
-        chunk.SetChunkGameObject(chunkObject);
-
-        for (int cellRow = 0; cellRow < cellsQuantityInChunk; cellRow++)
-        {
-            for (int cellCol = 0; cellCol < cellsQuantityInChunk; cellCol++)
-            {
-                Vector2 cellPosition = new Vector2(
-                    chunkOrigin.x + cellCol * cellSize,
-                    chunkOrigin.y - cellRow * cellSize
-                );
-
-                WallsInstance(
-                    cellPosition,
-                    chunk.GetCell(cellCol, cellRow),
-                    chunkObject
-                );
-            }
-        }
-    }
-
-    //Função para fechar os espaçamentos que aparece entre celulas diagonais, na conexão entre direita e baixo
-    // public Cell GetDiagonalCell(Chunk chunk, Vector2 position)
-    // {
-        
-    // }
 }
