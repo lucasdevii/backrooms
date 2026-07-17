@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3318074996427669522}
   - component: {fileID: 2774039137174635891}
   - component: {fileID: 1967278622512694224}
-  - component: {fileID: 3592249498923731063}
+  - component: {fileID: 1513516132019481781}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 33aaf4ab644df2a40953ed6dbec87115, type: 2}
+  - {fileID: 2100000, guid: c395416a160417a4eb2112fddd0a4300, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -113,7 +113,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3592249498923731063
+--- !u!114 &1513516132019481781
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,6 +122,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2688983112745682191}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59c807ba6678bb8448367d27d608b7ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 778383bb9ae71634f9f58274f9281c1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wall

@@ -9,9 +9,9 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject flashlight;
 
     // Movement
-    [SerializeField] private float speed;
-    [SerializeField] private float runningAcrescent;
-    [SerializeField] private float jumpForce;
+    [SerializeField] private float speed = 10;
+    [SerializeField] private float runningAcrescent = 5;
+    [SerializeField] private float jumpForce = 5;
 
     // Stamina
     [SerializeField] private float maxStamina = 100;
