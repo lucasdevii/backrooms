@@ -18,6 +18,11 @@ public class Player : MonoBehaviour
     [SerializeField] private float staminaDrain = 15f;
     [SerializeField] private float staminaRecovery = 8f;
 
+    // Sede
+    [SerializeField] private float maxThirst = 100;
+    [SerializeField] private float currentThirst;
+    [SerializeField] private float minutesForDrainAllThirst = 25;
+
     // State
     private float currentStamina;
     private bool isRunning;
@@ -27,15 +32,22 @@ public class Player : MonoBehaviour
     
     private Vector3 direction;
 
+    void Awake()
+    {
+        currentThirst = maxThirst;
+
+        currentStamina = maxStamina;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
-        currentStamina = maxStamina;
-
+    
         //Se a lanterna estiver ligada por padrão segue
         flashlightIsOn = flashlight.activeSelf;
+
+        StartCoroutine(DrainThirst());
     }
 
     // Update is called once per frame
@@ -44,6 +56,7 @@ public class Player : MonoBehaviour
         ReadMovement();
         ReadJump();
         ReadFlashlight();
+        ReadThirst();
     }
 
     void FixedUpdate()
@@ -79,6 +92,7 @@ public class Player : MonoBehaviour
             isRunning = true;
         }
     }
+
     void ReadJump()
     {
         if(Input.GetKeyDown(KeyCode.Space) && isGrounded){
@@ -92,6 +106,14 @@ public class Player : MonoBehaviour
         {
             flashlightIsOn = !flashlightIsOn;
             flashlight.SetActive(flashlightIsOn);
+        }
+    }
+
+    void ReadThirst()
+    {
+        if(currentThirst <= 0)
+        {
+            //MORRE
         }
     }
 
@@ -129,6 +151,15 @@ public class Player : MonoBehaviour
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
     
+    IEnumerator DrainThirst()
+    {
+        float quantityForDrain = maxThirst / (minutesForDrainAllThirst * 60);
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            currentThirst -= quantityForDrain;
+        }
+    }
 
     void OnCollisionStay(Collision collision)
     {
