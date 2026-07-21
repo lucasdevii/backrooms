@@ -1,33 +1,53 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
     // Components
     private Rigidbody rb;
+
 
     // References
     [SerializeField] private GameObject flashlight;
 
+
     // Movement
     [SerializeField] private float speed = 10;
-    [SerializeField] private float runningAcrescent = 5;
     [SerializeField] private float jumpForce = 5;
+
+    [SerializeField] private float runningAcrescent = 5;
+    [SerializeField] private float timeForRunAgain = 1.5f;
+    [SerializeField] private float lastRunStopTime;
+    private bool wasRunning;
+
 
     // Stamina
     [SerializeField] private float maxStamina = 100;
     [SerializeField] private float staminaDrain = 15f;
     [SerializeField] private float staminaRecovery = 8f;
+    public event Action<float, float> OnStaminaChanged;
+
 
     // Sede
     [SerializeField] private float maxThirst = 100;
-    [SerializeField] private float currentThirst;
+    private float currentThirst;
     [SerializeField] private float minutesForDrainAllThirst = 25;
+    public event Action<float> OnThristChanged;
+
 
     // Fome
     [SerializeField] private float maxHungry = 100;
-    [SerializeField] private float currentHungry;
+    private float currentHungry;
     [SerializeField] private float minutesForDrainAllHungry = 25;
+    public event Action<float> OnHungryChanged;
+
+
+    // Vida
+    [SerializeField] private float maxHealth = 100;
+    private float currentHealth;
+    public event Action<float> OnHealthChanged;
 
 
     // State
@@ -41,9 +61,14 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        // Inicializa sem bloquear a corrida
+        lastRunStopTime = -timeForRunAgain;
+
         currentThirst = maxThirst;
+        currentHungry = maxHungry;
 
         currentStamina = maxStamina;
+        currentHealth = maxHealth;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -80,25 +105,28 @@ public class Player : MonoBehaviour
 
     void ReadMovement()
     {
-        isRunning = false;
         direction = Vector3.zero;
 
-        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)){
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
             direction += Vector3.forward;
-        }
-        if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)){
-            direction += Vector3.left;
-        }
-        if(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)){
-            direction += Vector3.right;            
-        }
-        if(Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)){
-            direction += Vector3.back;            
-        }
 
-        if (direction != Vector3.zero && Input.GetKey(KeyCode.LeftShift) && currentStamina > 0){
-            isRunning = true;
-        }
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            direction += Vector3.left;
+
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            direction += Vector3.right;
+
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            direction += Vector3.back;
+
+        bool cooldownFinished =
+            Time.time >= lastRunStopTime + timeForRunAgain;
+
+        isRunning =
+            direction != Vector3.zero &&
+            Input.GetKey(KeyCode.LeftShift) &&
+            currentStamina > 0 &&
+            cooldownFinished;
     }
 
     void ReadJump()
@@ -131,23 +159,14 @@ public class Player : MonoBehaviour
 
         direction.Normalize();
 
-        if (isRunning)
-        {
-            currentSpeed += runningAcrescent;
-            currentStamina -= staminaDrain * Time.fixedDeltaTime;
-        }
-        else
-        {
-            currentStamina += staminaRecovery * Time.fixedDeltaTime;
-        }
-
-        currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
+        UpdateStamina(ref currentSpeed);
 
         Vector3 moveDirection =
             transform.forward * direction.z +
             transform.right * direction.x;
 
         Vector3 velocity = rb.linearVelocity;
+
         velocity.x = moveDirection.x * currentSpeed;
         velocity.z = moveDirection.z * currentSpeed;
 
@@ -157,6 +176,38 @@ public class Player : MonoBehaviour
     void Jump()
     {
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+    }
+    
+    void UpdateStamina(ref float currentSpeed)
+    {
+        // Acabou de parar de correr?
+        if (wasRunning && !isRunning)
+        {
+            lastRunStopTime = Time.time;
+        }
+
+        if (isRunning)
+        {
+            currentSpeed += runningAcrescent;
+
+            currentStamina -= staminaDrain * Time.fixedDeltaTime;
+        }
+        else
+        {
+            bool cooldownFinished =
+                Time.time >= lastRunStopTime + timeForRunAgain;
+
+            if (cooldownFinished)
+            {
+                currentStamina += staminaRecovery * Time.fixedDeltaTime;
+            }
+        }
+
+        currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
+
+        OnStaminaChanged?.Invoke(currentStamina, maxStamina);
+
+        wasRunning = isRunning;
     }
     
     IEnumerator DrainThirst()
