@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -22,6 +23,12 @@ public class Player : MonoBehaviour
     [SerializeField] private float maxThirst = 100;
     [SerializeField] private float currentThirst;
     [SerializeField] private float minutesForDrainAllThirst = 25;
+
+    // Fome
+    [SerializeField] private float maxHungry = 100;
+    [SerializeField] private float currentHungry;
+    [SerializeField] private float minutesForDrainAllHungry = 25;
+
 
     // State
     private float currentStamina;
@@ -48,6 +55,7 @@ public class Player : MonoBehaviour
         flashlightIsOn = flashlight.activeSelf;
 
         StartCoroutine(DrainThirst());
+        StartCoroutine(DrainHungry());
     }
 
     // Update is called once per frame
@@ -158,6 +166,16 @@ public class Player : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             currentThirst -= quantityForDrain;
+        }
+    }
+
+    IEnumerator DrainHungry()
+    {
+        float quantityForDrain = maxHungry / (minutesForDrainAllHungry * 60);
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            currentHungry -= quantityForDrain;
         }
     }
 
