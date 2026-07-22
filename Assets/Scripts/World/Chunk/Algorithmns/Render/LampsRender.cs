@@ -3,26 +3,23 @@ public static class LampsRender
 {
     public static void Render(        
         Chunk chunk,
-        GameObject chunkObject,
-        Vector2 chunkOrigin,
-        int cellSize,
-        int chunkSize,
-        int wallHeight,
-        Wall wallPrefab
+        Vector2 chunkOrigin
     )
     {
         for (int row = 0; row < chunk.GetData().GetLength(0); row++)
         {
+            float currentCellY = chunkOrigin.y - (row * WorldManager.cellSize) - WorldManager.cellSize / 2;
+            
             for (int col = 0; col < chunk.GetData().GetLength(1); col++)
             {
-                float value = Noise.DefaultNoise(chunk.chunkSeed, col, row);
+                float currentCellX = chunkOrigin.x + (col * WorldManager.cellSize) + WorldManager.cellSize / 2;
+                
+                bool hasLight = chunk.GetCell(col, row).hasLight;
 
-                if(value < 0.2)
+                if (hasLight)
                 {
-                    //Vai ter luz nesse espaço
-                    return;
+                    //Intancia na posição currentCellX e currentCellY    
                 }
-                //Não haverá luz
             }
         }
     }

@@ -12,6 +12,7 @@ public class WorldManager : MonoBehaviour
     }
 
     [SerializeField] private Transform playerPosition;
+    
     [SerializeField] private Wall wallPrefabScript;
     public ulong seed = 4196283291231231231;
     public Vector2Int playerChunk = new Vector2Int();
@@ -22,11 +23,11 @@ public class WorldManager : MonoBehaviour
     private int chunkSize; //Tamanho de cada chunk em unidades de escala do game
 
     //-------------- CÉLULAs ---------------
-    private static int cellSize = 5;
+    public static int cellSize = 5;
     public static int cellsQuantityInChunk = 32; 
 
-    public static int wallHeight = 6;
-    private Vector3 groundAndCeilingSize;
+    public static float wallHeight = 6.5f;
+    private Vector3 groundAndCeilingSize; //Precisa ter o mesmo tamanho que o chunkSize
   
 
     void Awake()
@@ -37,7 +38,7 @@ public class WorldManager : MonoBehaviour
         chunkSize = cellSize * cellsQuantityInChunk;
 
         matriz = new Chunk[matrizSize, matrizSize];
-        groundAndCeilingSize = new Vector3(chunkSize, 1, chunkSize);
+        groundAndCeilingSize = new Vector3(chunkSize, 0.5f, chunkSize);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -129,7 +130,6 @@ public class WorldManager : MonoBehaviour
                     wallPrefabScript,
                     cellSize,
                     chunkSize,
-                    wallHeight,
                     groundAndCeilingSize
                 );
             }
@@ -215,7 +215,6 @@ public class WorldManager : MonoBehaviour
                     wallPrefabScript,
                     cellSize,
                     chunkSize,
-                    wallHeight,
                     groundAndCeilingSize
                 );
         }
@@ -229,7 +228,6 @@ public class WorldManager : MonoBehaviour
                     wallPrefabScript,
                     cellSize,
                     chunkSize,
-                    wallHeight,
                     groundAndCeilingSize
                 );
         }
@@ -241,7 +239,6 @@ public class WorldManager : MonoBehaviour
                     wallPrefabScript,
                     cellSize,
                     chunkSize,
-                    wallHeight,
                     groundAndCeilingSize
                 );
         }
@@ -255,7 +252,6 @@ public class WorldManager : MonoBehaviour
                     wallPrefabScript,
                     cellSize,
                     chunkSize,
-                    wallHeight,
                     groundAndCeilingSize
                 );
         }

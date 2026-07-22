@@ -6,7 +6,8 @@ public class Cell
     private ulong chunkSeed;
     private Vector2Int position;
     private HashSet<WorldManager.Direction> openedWalls;
-    
+    public bool hasLight;
+ 
     public Cell(ulong chunkSeed, int row, int col)
     {
         this.chunkSeed = chunkSeed;

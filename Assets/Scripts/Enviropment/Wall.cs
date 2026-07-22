@@ -9,7 +9,7 @@ public class Wall : MonoBehaviour
     public void SetPosition(Vector2 position)
     {
         Position = position;
-        transform.position = new Vector3(Position.x, transform.position.y, Position.y);
+        transform.position = new Vector3(Position.x, WorldManager.wallHeight / 2, Position.y);
     }
 
     public void SetSize(float width, float height)

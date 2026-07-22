@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 
 public static class ChunkDataGenerator
@@ -54,6 +55,8 @@ public static class ChunkDataGenerator
                 visited.Count,
                 83
             );
+
+            GenerateLightInCell(matrix[current.x, current.y], seed);
 
             // Chance de criar uma conexão extra (loop).
             if (visitedNeighbors.Count > 0 && loopNoise < 0.1f)
@@ -240,5 +243,18 @@ public static class ChunkDataGenerator
                     reference.position.y + 1
                 );
         }
+    }
+
+    public static void GenerateLightInCell(Cell cell, ulong seed)
+    {
+        Vector2Int position = cell.GetPosition();
+        float value = Noise.DefaultNoise(seed, position.x, position.y);
+
+        if (value <= 0.15){
+            cell.hasLight = false;
+            return;
+        }
+
+        cell.hasLight = true;
     }
 }

@@ -7,7 +7,6 @@ public static class ChunkRender
         Wall wallPrefab,
         int cellSize,
         int chunkSize,
-        int wallHeight,
         Vector3 groundAndCeilingSize
     )
     {
@@ -53,7 +52,6 @@ public static class ChunkRender
                 WallsRender.Render(
                     chunkObject,
                     cellSize,
-                    wallHeight,
                     wallPrefab,
                     cellPosition,
                     cell
@@ -63,12 +61,7 @@ public static class ChunkRender
 
         LampsRender.Render(
             chunk,
-            chunkObject,
-            chunkOrigin,
-            cellSize,
-            chunkSize,
-            wallHeight,
-            wallPrefab
+            chunkOrigin
         );
     }
 

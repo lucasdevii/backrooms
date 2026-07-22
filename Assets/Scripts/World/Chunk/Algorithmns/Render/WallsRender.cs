@@ -6,7 +6,6 @@ public static class WallsRender
     public static void Render(
         GameObject chunkObject,
         int cellSize,
-        int wallHeight,
         Wall wallPrefab,
         Vector2 cellPosition,
         Cell cell
@@ -28,7 +27,7 @@ public static class WallsRender
                     cellPosition.y
                 ),
                 cellSize + Wall.thickness,
-                wallHeight,
+                WorldManager.wallHeight,
                 90
             );
         }
@@ -47,7 +46,7 @@ public static class WallsRender
                     cellPosition.y - (cellSize / 2f)
                 ),
                 cellSize + Wall.thickness,
-                wallHeight,
+                WorldManager.wallHeight,
                 0
             );
         }
