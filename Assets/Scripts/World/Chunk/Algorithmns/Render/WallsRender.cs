@@ -1,43 +1,55 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 public static class WallsRender
 {
-    public static void Render(        
+    public static void Render(
         GameObject chunkObject,
         int cellSize,
         int wallHeight,
         Wall wallPrefab,
-        Vector2 cellPosition, 
+        Vector2 cellPosition,
         Cell cell
     )
     {
         HashSet<WorldManager.Direction> openedWalls = cell.GetOpenedWalls();
-    
-        if(!openedWalls.Contains(WorldManager.Direction.Right))
+
+        // Parede direita
+        if (!openedWalls.Contains(WorldManager.Direction.Right))
         {
-            //Deixa as paredes como filhas do gameObject do chunk, para melhor organização na hierarquia
-            Wall wall = GameObject.Instantiate(wallPrefab, chunkObject.transform);
+            Wall wall = GameObject.Instantiate(
+                wallPrefab,
+                chunkObject.transform
+            );
 
             wall.Inicialize(
-                new Vector2(cellPosition.x + (cellSize / 2), cellPosition.y), 
-                cellSize, 
-                wallHeight, 
+                new Vector2(
+                    cellPosition.x + (cellSize / 2f),
+                    cellPosition.y
+                ),
+                cellSize + Wall.thickness,
+                wallHeight,
                 90
             );
         }
-        if(!openedWalls.Contains(WorldManager.Direction.Bottom))
+
+        // Parede inferior
+        if (!openedWalls.Contains(WorldManager.Direction.Bottom))
         {
-            Wall wall = GameObject.Instantiate(wallPrefab, chunkObject.transform);
-            
-            wall.Inicialize(
-                new Vector2(cellPosition.x, cellPosition.y - (cellSize / 2)), 
-                cellSize, 
-                wallHeight, 
-                0
+            Wall wall = GameObject.Instantiate(
+                wallPrefab,
+                chunkObject.transform
             );
 
+            wall.Inicialize(
+                new Vector2(
+                    cellPosition.x,
+                    cellPosition.y - (cellSize / 2f)
+                ),
+                cellSize + Wall.thickness,
+                wallHeight,
+                0
+            );
         }
     }
-    
 }
