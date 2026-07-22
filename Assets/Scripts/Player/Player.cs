@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
 
     // Movement
     [SerializeField] private float speed = 10;
-    [SerializeField] private float jumpForce = 5;
+    [SerializeField] private float jumpForce = 20;
 
     [SerializeField] private float runningAcrescent = 5;
     [SerializeField] private float timeForRunAgain = 1.5f;
