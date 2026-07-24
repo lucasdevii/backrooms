@@ -7,7 +7,8 @@ public static class ChunkRender
         Wall wallPrefab,
         int cellSize,
         int chunkSize,
-        Vector3 groundAndCeilingSize
+        Vector3 groundAndCeilingSize,
+        Lamp lamp
     )
     {
         Vector2 chunkOrigin = new Vector2(
@@ -59,9 +60,12 @@ public static class ChunkRender
             }
         }
 
+        //Vai carregar as lampadas em uma raio especifico
         LampsRender.Render(
             chunk,
-            chunkOrigin
+            chunkOrigin,
+            lamp,
+            chunkObject
         );
     }
 

@@ -14,8 +14,12 @@ public class WorldManager : MonoBehaviour
     [SerializeField] private Transform playerPosition;
     
     [SerializeField] private Wall wallPrefabScript;
+    [SerializeField] private Lamp lamp;
+    
     public ulong seed = 4196283291231231231;
     public Vector2Int playerChunk = new Vector2Int();
+    public Vector2Int playerCell = new Vector2Int();
+    
     public int renderDistance = 1;
     public Chunk[,] matriz;
 
@@ -24,21 +28,21 @@ public class WorldManager : MonoBehaviour
 
     //-------------- CÉLULAs ---------------
     public static int cellSize = 5;
-    public static int cellsQuantityInChunk = 32; 
+    public static int cellsQuantityInChunk = 20; 
 
-    public static float wallHeight = 6.5f;
+    public static float wallHeight = 6f;
     private Vector3 groundAndCeilingSize; //Precisa ter o mesmo tamanho que o chunkSize
+    public static float groundAndCeilingThickness = 0.5f;
   
 
     void Awake()
     {
-
         int matrizSize = (renderDistance * 2) + 1;
 
         chunkSize = cellSize * cellsQuantityInChunk;
 
         matriz = new Chunk[matrizSize, matrizSize];
-        groundAndCeilingSize = new Vector3(chunkSize, 0.5f, chunkSize);
+        groundAndCeilingSize = new Vector3(chunkSize, groundAndCeilingThickness, chunkSize);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -86,7 +90,7 @@ public class WorldManager : MonoBehaviour
             int dx = playerChunk.x - currentChunkPosition.x;
             int dy = playerChunk.y - currentChunkPosition.y;
 
-            LoadNewChunks(currentChunkPosition, dx, dy);
+            LoadNewChunks(dx, dy);
         }
 
         playerChunk.x = currentChunkPosition.x; 
@@ -130,13 +134,14 @@ public class WorldManager : MonoBehaviour
                     wallPrefabScript,
                     cellSize,
                     chunkSize,
-                    groundAndCeilingSize
+                    groundAndCeilingSize,
+                    lamp
                 );
             }
         }
     }
 
-    void LoadNewChunks(Vector2Int newPlayerChunk, int dx, int dy)
+    void LoadNewChunks(int dx, int dy)
     {
         if(dx > 0) //Player se moveu para a esquerda
         {
@@ -215,7 +220,8 @@ public class WorldManager : MonoBehaviour
                     wallPrefabScript,
                     cellSize,
                     chunkSize,
-                    groundAndCeilingSize
+                    groundAndCeilingSize,
+                    lamp
                 );
         }
         else if (direction == Direction.Right)
@@ -228,7 +234,8 @@ public class WorldManager : MonoBehaviour
                     wallPrefabScript,
                     cellSize,
                     chunkSize,
-                    groundAndCeilingSize
+                    groundAndCeilingSize,
+                    lamp
                 );
         }
         else if (direction == Direction.Top)
@@ -239,7 +246,8 @@ public class WorldManager : MonoBehaviour
                     wallPrefabScript,
                     cellSize,
                     chunkSize,
-                    groundAndCeilingSize
+                    groundAndCeilingSize,
+                    lamp
                 );
         }
         else if (direction == Direction.Bottom)
@@ -252,7 +260,8 @@ public class WorldManager : MonoBehaviour
                     wallPrefabScript,
                     cellSize,
                     chunkSize,
-                    groundAndCeilingSize
+                    groundAndCeilingSize,
+                    lamp
                 );
         }
     }
