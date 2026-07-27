@@ -16,14 +16,16 @@ public class WorldManager : MonoBehaviour
     [SerializeField] private Wall wallPrefabScript;
     [SerializeField] private Lamp lamp;
     
-    public ulong seed = 4196283291231231231;
+    public ulong seed = 4196283291932386;
+
     public Vector2Int playerChunk = new Vector2Int();
     public Vector2Int playerCell = new Vector2Int();
-    
+
+    public static int renderLightsRadius = 10;
     public int renderDistance = 1;
     public Chunk[,] matriz;
 
-    //--------------- CHUNK ----------------
+    //--------------- CHUNK ----------------,,
     private int chunkSize; //Tamanho de cada chunk em unidades de escala do game
 
     //-------------- CÉLULAs ---------------
@@ -54,10 +56,10 @@ public class WorldManager : MonoBehaviour
         }
 
         DefinePlayerChunk();
+        DefinePlayerCell();
 
         FillInMatrizOfChunks();
         ChunkRender.ConnectChunks(matriz);
-
         InstantiateChunksInWorld();
     }
 
@@ -65,12 +67,24 @@ public class WorldManager : MonoBehaviour
     void Update()
     {
         VerifyIfChunkChange();
+        VerifyIfCellChange();
     }
 
     void DefinePlayerChunk()
     {
         playerChunk.x = Mathf.FloorToInt(playerPosition.position.x / chunkSize);
         playerChunk.y = Mathf.FloorToInt(playerPosition.position.z / chunkSize);
+    }
+
+    void DefinePlayerCell()
+    {
+        Vector2Int chunkPlayerOrigin = new Vector2Int(playerChunk.x * chunkSize, playerChunk.y * chunkSize);
+        
+        int cellXInChunk = Mathf.FloorToInt(playerPosition.position.x - chunkPlayerOrigin.x);
+        int cellYInChunk = Mathf.FloorToInt(playerPosition.position.z - chunkPlayerOrigin.y);
+
+        playerCell.x = cellXInChunk;
+        playerCell.y = cellYInChunk;
     }
     
     void VerifyIfChunkChange()
@@ -95,6 +109,31 @@ public class WorldManager : MonoBehaviour
 
         playerChunk.x = currentChunkPosition.x; 
         playerChunk.y = currentChunkPosition.y;
+
+    }
+
+    void VerifyIfCellChange()
+    {
+        if (playerPosition == null) return;
+
+        Vector2Int currentCellPosition = new Vector2Int(
+            Mathf.FloorToInt(playerPosition.position.x / cellSize), 
+            Mathf.FloorToInt(playerPosition.position.z / cellSize)
+        );
+
+        if(currentCellPosition != playerCell)
+        {
+            Debug.Log($"Mudou de celula | current celula: {currentCellPosition.x}, {currentCellPosition.y} | ");
+            //A variação em x e y do chunk do player, para saber quais chunks carregar e quais chunks remover
+            int dx = playerCell.x - currentCellPosition.x;
+            int dy = playerCell.y - currentCellPosition.y;
+
+            //Renderizar luzes
+
+        }
+
+        playerCell.x = currentCellPosition.x; 
+        playerCell.y = currentCellPosition.y;
 
     }
 
@@ -265,4 +304,5 @@ public class WorldManager : MonoBehaviour
                 );
         }
     }
+
 }

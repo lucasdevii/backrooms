@@ -18,14 +18,17 @@ public static class LampsRender
             {
                 float currentCellX = chunkOrigin.x + (col * WorldManager.cellSize) + WorldManager.cellSize;
                 
-                bool hasLight = chunk.GetCell(col, row).hasLight;
+                Cell cellOfLight = chunk.GetCell(col, row);
+                bool hasLight = cellOfLight.hasLight;
 
                 Lamp newLamp = GameObject.Instantiate(lamp);
+
+                cellOfLight.SetLightObject(newLamp);
+
                 newLamp.Inicialize(new Vector3(currentCellX, heightOfLamps, currentCellY), hasLight, chunkObject);
             }
         }
     }
-
     // public static void RenderLight(Chunk chunk, Vector2 chunkOrigin, GameObject lamp, GameObject chunkObject, )
     // {
     //     Vector3 positionForRender = new Vector3(

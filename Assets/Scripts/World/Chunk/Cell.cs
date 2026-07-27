@@ -1,12 +1,15 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Cell
 {
+    private Lamp light;
     private ulong chunkSeed;
     private Vector2Int position;
     private HashSet<WorldManager.Direction> openedWalls;
     public bool hasLight;
+    private bool hasShadow = false;
  
     public Cell(ulong chunkSeed, int row, int col)
     {
@@ -33,5 +36,16 @@ public class Cell
 
     public void SetOpenedWalls(WorldManager.Direction wall){
         openedWalls.Add(wall);
+    }
+
+    public void SetLightShadow(bool value)
+    {
+        hasShadow = value;
+        light.SetShadow(value);
+    }
+
+    public void SetLightObject(Lamp light)
+    {
+        this.light = light;
     }
 }
