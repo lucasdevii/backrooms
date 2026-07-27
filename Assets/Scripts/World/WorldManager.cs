@@ -63,7 +63,7 @@ public class WorldManager : MonoBehaviour
         InstantiateChunksInWorld();
     }
 
-    // Update is called once per frame
+    // Update is called once before the first execution of Update after the MonoBehaviour is created
     void Update()
     {
         VerifyIfChunkChange();
@@ -87,54 +87,62 @@ public class WorldManager : MonoBehaviour
         playerCell.y = cellYInChunk;
     }
     
-    void VerifyIfChunkChange()
+    bool VerifyIfChunkChange()
     {
-        
-        if (playerPosition == null) return;
+        if (playerPosition == null) return false;
 
         Vector2Int currentChunkPosition = new Vector2Int(
-            Mathf.FloorToInt(playerPosition.position.x / chunkSize), 
+            Mathf.FloorToInt(playerPosition.position.x / chunkSize),
             Mathf.FloorToInt(playerPosition.position.z / chunkSize)
         );
 
-        if(currentChunkPosition != playerChunk)
+        if (currentChunkPosition != playerChunk)
         {
             Debug.Log($"Mudou de chunk | current chunk: {currentChunkPosition.x}, {currentChunkPosition.y} | ");
-            //A variação em x e y do chunk do player, para saber quais chunks carregar e quais chunks remover
             int dx = playerChunk.x - currentChunkPosition.x;
             int dy = playerChunk.y - currentChunkPosition.y;
 
             LoadNewChunks(dx, dy);
+            playerChunk.x = currentChunkPosition.x;
+            playerChunk.y = currentChunkPosition.y;
+            return true;
         }
 
-        playerChunk.x = currentChunkPosition.x; 
+        playerChunk.x = currentChunkPosition.x;
         playerChunk.y = currentChunkPosition.y;
-
+        return false;
     }
 
-    void VerifyIfCellChange()
+    bool VerifyIfCellChange()
     {
-        if (playerPosition == null) return;
+        if (playerPosition == null) return false;
 
-        Vector2Int currentCellPosition = new Vector2Int(
-            Mathf.FloorToInt(playerPosition.position.x / cellSize), 
-            Mathf.FloorToInt(playerPosition.position.z / cellSize)
+        Vector2Int currentChunkPosition = new Vector2Int(
+            Mathf.FloorToInt(playerPosition.position.x / chunkSize),
+            Mathf.FloorToInt(playerPosition.position.z / chunkSize)
         );
 
-        if(currentCellPosition != playerCell)
+        Vector2Int chunkPlayerOrigin = new Vector2Int(
+            currentChunkPosition.x * chunkSize,
+            currentChunkPosition.y * chunkSize
+        );
+
+        Vector2Int currentCellPosition = new Vector2Int(
+            Mathf.FloorToInt(playerPosition.position.x - chunkPlayerOrigin.x),
+            Mathf.FloorToInt(playerPosition.position.z - chunkPlayerOrigin.y)
+        );
+
+        if (currentCellPosition != playerCell)
         {
             Debug.Log($"Mudou de celula | current celula: {currentCellPosition.x}, {currentCellPosition.y} | ");
-            //A variação em x e y do chunk do player, para saber quais chunks carregar e quais chunks remover
-            int dx = playerCell.x - currentCellPosition.x;
-            int dy = playerCell.y - currentCellPosition.y;
-
-            //Renderizar luzes
-
+            playerCell.x = currentCellPosition.x;
+            playerCell.y = currentCellPosition.y;
+            return true;
         }
 
-        playerCell.x = currentCellPosition.x; 
+        playerCell.x = currentCellPosition.x;
         playerCell.y = currentCellPosition.y;
-
+        return false;
     }
 
     void FillInMatrizOfChunks()

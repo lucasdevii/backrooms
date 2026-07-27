@@ -48,4 +48,9 @@ public class Cell
     {
         this.light = light;
     }
+
+    public Lamp GetLightObject()
+    {
+        return light;
+    }
 }

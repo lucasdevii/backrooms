@@ -1,27 +1,28 @@
-using Unity.Mathematics;
 using UnityEngine;
+
 public static class LampsRender
 {
-    public static void Render(        
+    public static void Render(
         Chunk chunk,
         Vector2 chunkOrigin,
         Lamp lamp,
         GameObject chunkObject
     )
     {
-        float heightOfLamps = WorldManager.wallHeight - (WorldManager.groundAndCeilingThickness / 2);;
+        float heightOfLamps = WorldManager.wallHeight - (WorldManager.groundAndCeilingThickness / 2);
+
         for (int row = 0; row < chunk.GetData().GetLength(0); row++)
         {
             float currentCellY = chunkOrigin.y - (row * WorldManager.cellSize) - WorldManager.cellSize;
-            
+
             for (int col = 0; col < chunk.GetData().GetLength(1); col++)
             {
                 float currentCellX = chunkOrigin.x + (col * WorldManager.cellSize) + WorldManager.cellSize;
-                
+
                 Cell cellOfLight = chunk.GetCell(col, row);
                 bool hasLight = cellOfLight.hasLight;
 
-                Lamp newLamp = GameObject.Instantiate(lamp);
+                Lamp newLamp = Object.Instantiate(lamp);
 
                 cellOfLight.SetLightObject(newLamp);
 
@@ -29,13 +30,4 @@ public static class LampsRender
             }
         }
     }
-    // public static void RenderLight(Chunk chunk, Vector2 chunkOrigin, GameObject lamp, GameObject chunkObject, )
-    // {
-    //     Vector3 positionForRender = new Vector3(
-    //         chunkOrigin + WorldManager.cellSize * 
-
-            
-            
-    //     );
-    // }
 }
