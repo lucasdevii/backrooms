@@ -3,17 +3,28 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
-    [SerializeField] private Slider healthSlider;
+    [SerializeField] private Slider HealthSlider;
+    [SerializeField] private Player player;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Start()
+    {
+        HealthSlider.maxValue = player.maxHealth;
+        HealthSlider.value = player.currentHealth;
+
+        player.OnHealthChanged += SetHealth;
+    }
+
+    public void Update()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void SetHealth(float currentHealth, float maxHealth)
     {
-        
+        if(maxHealth != HealthSlider.maxValue)
+        {
+            HealthSlider.maxValue = maxHealth;
+        }
+        HealthSlider.value = currentHealth;
     }
 }

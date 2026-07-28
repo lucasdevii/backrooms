@@ -24,34 +24,34 @@ public class Player : MonoBehaviour
 
 
     // Stamina
-    [SerializeField] private float maxStamina = 100;
+    [SerializeField] public float maxStamina = 100;
+    [SerializeField] public float currentStamina;
     [SerializeField] private float staminaDrain = 15f;
     [SerializeField] private float staminaRecovery = 8f;
     public event Action<float, float> OnStaminaChanged;
 
 
     // Sede
-    [SerializeField] private float maxThirst = 100;
-    private float currentThirst;
-    [SerializeField] private float minutesForDrainAllThirst = 25;
-    public event Action<float> OnThristChanged;
+    [SerializeField] public float maxThirst = 100;
+    public float currentThirst;
+    [SerializeField] private float minutesForDrainAllThirst = 2;
+    public event Action<float, float> OnThristChanged;
 
 
     // Fome
-    [SerializeField] private float maxHungry = 100;
-    private float currentHungry;
-    [SerializeField] private float minutesForDrainAllHungry = 25;
-    public event Action<float> OnHungryChanged;
+    [SerializeField] public float maxHungry = 100;
+    public float currentHungry;
+    [SerializeField] private float minutesForDrainAllHungry = 2;
+    public event Action<float, float> OnHungryChanged;
 
 
     // Vida
-    [SerializeField] private float maxHealth = 100;
-    private float currentHealth;
-    public event Action<float> OnHealthChanged;
+    [SerializeField] public float maxHealth = 100;
+    public float currentHealth;
+    public event Action<float, float> OnHealthChanged;
 
 
     // State
-    private float currentStamina;
     private bool isRunning;
     private bool jumpRequested;
     private bool isGrounded;
@@ -217,6 +217,7 @@ public class Player : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             currentThirst -= quantityForDrain;
+            OnThristChanged?.Invoke(currentThirst, maxThirst);
         }
     }
 
@@ -227,6 +228,7 @@ public class Player : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
             currentHungry -= quantityForDrain;
+            OnHungryChanged?.Invoke(currentHungry, maxHungry);
         }
     }
 
