@@ -1,17 +1,18 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 
 public static class ChunkDataGenerator
 {
-    public static void Generate(Cell[,] matrix, ulong seed, Vector2Int position)
+    public static void Generate(Cell[,] matrix, ulong chunkSeed, Vector2Int position)
     {
         int size = matrix.GetLength(0);
 
         HashSet<Vector2Int> visited = new();
         Stack<Vector2Int> path = new();
 
-        Vector2Int current = Chunk.GetInitCell(seed, position, size);
+        Vector2Int current = Chunk.GetInitCell(chunkSeed, position, size);
 
         visited.Add(current);
         path.Push(current);
@@ -39,7 +40,7 @@ public static class ChunkDataGenerator
             }
 
             float loopNoise = Noise.DefaultNoise(
-                seed,
+                chunkSeed,
                 current.x,
                 current.y,
                 path.Count,
@@ -48,7 +49,7 @@ public static class ChunkDataGenerator
             );
 
             float directionNoise = Noise.DefaultNoise(
-                seed,
+                chunkSeed,
                 current.x,
                 current.y,
                 path.Count,
@@ -56,13 +57,13 @@ public static class ChunkDataGenerator
                 83
             );
 
-            GenerateLightInCell(matrix[current.x, current.y], seed);
+            GenerateLightInCell(matrix[current.x, current.y], chunkSeed);
 
             // Chance de criar uma conexão extra (loop).
             if (visitedNeighbors.Count > 0 && loopNoise < 0.1f)
             {
                 int index = Mathf.FloorToInt(
-                    Noise.DefaultNoise(seed, current.x, current.y, 991)
+                    Noise.DefaultNoise(chunkSeed, current.x, current.y, 991)
                     * visitedNeighbors.Count
                 );
 
@@ -82,6 +83,8 @@ public static class ChunkDataGenerator
 
             OpenPath(current, next, matrix);
         }
+
+        GenerateRooms(matrix, chunkSeed);
     }
 
     public static void InitializeMatrix(Cell[,] matrix, ulong seed)
@@ -256,5 +259,78 @@ public static class ChunkDataGenerator
         }
 
         cell.hasLight = true;
+    }
+
+    public static Vector2Int SelectRandomCell(ulong chunkSeed, int weight = 1)
+    {
+        float valueX = Noise.DefaultNoise(chunkSeed, 14, weight);
+        float valueY = Noise.DefaultNoise(chunkSeed, 96, weight);
+        
+        int posX = Mathf.FloorToInt(valueX * WorldManager.cellsQuantityInChunk);
+        int posY = Mathf.FloorToInt(valueY * WorldManager.cellsQuantityInChunk);
+
+        return new Vector2Int(posX, posY);
+    }
+
+    private static int SelectRoomsQuantity(int minQuantityOfRooms, int maxQuantityOfRooms, ulong chunkSeed)
+    {
+        float value = Noise.DefaultNoise(chunkSeed);
+
+        return Mathf.FloorToInt(
+            (
+                (maxQuantityOfRooms - minQuantityOfRooms) 
+                * value
+            ) 
+            + minQuantityOfRooms
+        );
+    }
+
+    private static void ExpandRooms(Cell[,] chunk, Vector2Int[] roomsPositions, ulong chunkSeed)
+    {
+        //Tamanho maximo que uma sala pode ter. Limitado pelo tamanho do chunk
+        int maxRoomSize = Mathf.FloorToInt(WorldManager.cellsQuantityInChunk / roomsPositions.Length);
+
+        //Expande ponto de sala por ponto de sala
+        for(int i = 0; i < roomsPositions.Length; i++)
+        {
+            Vector2Int positionOfRoom = roomsPositions[i];
+
+            float value = Noise.DefaultNoise(chunkSeed, positionOfRoom.x, positionOfRoom.y);
+            int radiusRoom = Mathf.FloorToInt(value * maxRoomSize / 2);
+
+            int initX = Mathf.Clamp(positionOfRoom.x - radiusRoom, 0, positionOfRoom.x);
+            int initY = Mathf.Clamp(positionOfRoom.y - radiusRoom, 0, positionOfRoom.y);
+
+            int maxX = Mathf.Clamp(positionOfRoom.x + radiusRoom, positionOfRoom.x, chunk.GetLength(0));
+            int maxY = Mathf.Clamp(positionOfRoom.y + radiusRoom, positionOfRoom.y, chunk.GetLength(1));
+
+            for(int row = initY; row < maxY; row++)
+            {
+                for(int col = initX; col < maxX; col++)
+                {
+                    //Abre todas as portas, transformando-a em uma sala
+                    chunk[row, col].OpenAllWalls();
+                }
+            }
+
+        }
+
+
+    }
+
+    public static void GenerateRooms(Cell[,] chunk, ulong chunkSeed)
+    {
+        int quantityOfRooms = SelectRoomsQuantity(1, 6, chunkSeed);
+        //Array em que sera guardado os pontos de sala
+        Vector2Int[] roomsPositions = new Vector2Int[quantityOfRooms];
+
+        for(int i = 0; i < quantityOfRooms; i++)
+        {
+            Vector2Int positionCell = SelectRandomCell(chunkSeed, i + 1);
+
+            roomsPositions[i] = positionCell;
+        }
+        
+        ExpandRooms(chunk, roomsPositions, chunkSeed);
     }
 }

@@ -38,6 +38,14 @@ public class Cell
         openedWalls.Add(wall);
     }
 
+    public void OpenAllWalls()
+    {
+        openedWalls.Add(WorldManager.Direction.Top);
+        openedWalls.Add(WorldManager.Direction.Bottom);
+        openedWalls.Add(WorldManager.Direction.Left);
+        openedWalls.Add(WorldManager.Direction.Right);
+    }
+
     public void SetLightShadow(bool value)
     {
         hasShadow = value;
