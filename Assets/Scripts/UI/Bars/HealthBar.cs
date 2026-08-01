@@ -6,7 +6,7 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Slider HealthSlider;
     [SerializeField] private Player player;
 
-    public void Start()
+    void Start()
     {
         HealthSlider.maxValue = player.maxHealth;
         HealthSlider.value = player.currentHealth;
@@ -14,7 +14,7 @@ public class HealthBar : MonoBehaviour
         player.OnHealthChanged += SetHealth;
     }
 
-    public void Update()
+    void Update()
     {
         
     }

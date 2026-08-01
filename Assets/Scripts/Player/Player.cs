@@ -34,14 +34,14 @@ public class Player : MonoBehaviour
     // Sede
     [SerializeField] public float maxThirst = 100;
     public float currentThirst;
-    [SerializeField] private float minutesForDrainAllThirst = 2;
+    [SerializeField] private float minutesForDrainAllThirst = 10;
     public event Action<float, float> OnThristChanged;
 
 
     // Fome
     [SerializeField] public float maxHungry = 100;
     public float currentHungry;
-    [SerializeField] private float minutesForDrainAllHungry = 2;
+    [SerializeField] private float minutesForDrainAllHungry = 10;
     public event Action<float, float> OnHungryChanged;
 
 
@@ -230,6 +230,16 @@ public class Player : MonoBehaviour
             currentHungry -= quantityForDrain;
             OnHungryChanged?.Invoke(currentHungry, maxHungry);
         }
+    }
+
+    public void ReceiveDamage(float damage)
+    {
+        currentHealth = Math.Clamp(currentHealth - damage, 0, maxHealth);
+    }
+
+    void ReceiveCure()
+    {
+        
     }
 
     void OnCollisionStay(Collision collision)

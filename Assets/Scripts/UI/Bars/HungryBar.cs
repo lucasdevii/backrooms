@@ -6,7 +6,7 @@ public class HungryBar : MonoBehaviour
     [SerializeField] private Slider HungrySlider;
     [SerializeField] private Player player;
 
-    public void Start()
+    void Start()
     {
         HungrySlider.maxValue = player.maxHungry;
         HungrySlider.value = player.currentHungry;
@@ -14,7 +14,7 @@ public class HungryBar : MonoBehaviour
         player.OnHungryChanged += SetHungry;
     }
 
-    public void Update()
+    void Update()
     {
         
     }

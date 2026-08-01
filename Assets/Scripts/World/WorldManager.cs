@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldManager : MonoBehaviour
@@ -115,34 +113,28 @@ public class WorldManager : MonoBehaviour
 
     bool VerifyIfCellChange()
     {
-        if (playerPosition == null) return false;
+        if (playerPosition == null)
+            return false;
 
         Vector2Int currentChunkPosition = new Vector2Int(
             Mathf.FloorToInt(playerPosition.position.x / chunkSize),
             Mathf.FloorToInt(playerPosition.position.z / chunkSize)
         );
 
-        Vector2Int chunkPlayerOrigin = new Vector2Int(
-            currentChunkPosition.x * chunkSize,
-            currentChunkPosition.y * chunkSize
-        );
+        Vector2Int chunkOrigin = currentChunkPosition * chunkSize;
 
         Vector2Int currentCellPosition = new Vector2Int(
-            Mathf.FloorToInt(playerPosition.position.x - chunkPlayerOrigin.x),
-            Mathf.FloorToInt(playerPosition.position.z - chunkPlayerOrigin.y)
+            Mathf.FloorToInt(playerPosition.position.x - chunkOrigin.x),
+            Mathf.FloorToInt(playerPosition.position.z - chunkOrigin.y)
         );
 
-        if (currentCellPosition != playerCell)
-        {
-            Debug.Log($"Mudou de celula | current celula: {currentCellPosition.x}, {currentCellPosition.y} | ");
-            playerCell.x = currentCellPosition.x;
-            playerCell.y = currentCellPosition.y;
-            return true;
-        }
+        bool changed = currentCellPosition != playerCell;
 
-        playerCell.x = currentCellPosition.x;
-        playerCell.y = currentCellPosition.y;
-        return false;
+        if (changed)
+            Debug.Log($"Mudou de célula | {currentCellPosition}");
+
+        playerCell = currentCellPosition;
+        return changed;
     }
 
     void FillInMatrizOfChunks()
@@ -311,6 +303,14 @@ public class WorldManager : MonoBehaviour
                     lamp
                 );
         }
+    }
+
+    public Vector2Int GetRandomChunk()
+    {
+        int randomX = Random.Range(0, matriz.GetLength(0) - 1);
+        int randomY = Random.Range(0, matriz.GetLength(1) - 1);
+
+        return new Vector2Int(randomX, randomY);
     }
 
 }

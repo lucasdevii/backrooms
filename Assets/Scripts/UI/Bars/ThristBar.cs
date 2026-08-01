@@ -6,7 +6,7 @@ public class ThristBar : MonoBehaviour
     [SerializeField] private Slider ThristSlider;
     [SerializeField] private Player player;
 
-    public void Start()
+    void Start()
     {        
         ThristSlider.maxValue = player.maxThirst;
         ThristSlider.value = player.currentThirst;
@@ -14,7 +14,7 @@ public class ThristBar : MonoBehaviour
         player.OnThristChanged += SetThrist;
     }
 
-    public void Update()
+    void Update()
     {
         
     }

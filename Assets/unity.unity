@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9813727, b: 0, a: 1}
+  m_Color: {r: 0.51886785, g: 0.661216, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -463,7 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.039595604, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -665,7 +665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9813727, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.27755523, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -855,7 +855,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 200, y: 24.7}
+  m_AnchoredPosition: {x: 200, y: 26}
   m_SizeDelta: {x: 332.2545, y: 8.1474}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &418093052
@@ -870,7 +870,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d62d2d5293bba74284e4a6d979b388f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  healthSlider: {fileID: 418093053}
+  HealthSlider: {fileID: 0}
+  player: {fileID: 0}
 --- !u!114 &418093053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -972,7 +973,7 @@ GameObject:
   - component: {fileID: 589615175}
   - component: {fileID: 589615174}
   - component: {fileID: 589615173}
-  - component: {fileID: 589615172}
+  - component: {fileID: 589615176}
   m_Layer: 5
   m_Name: ThristBar
   m_TagString: Untagged
@@ -998,23 +999,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -200, y: 23}
+  m_AnchoredPosition: {x: -200, y: 26}
   m_SizeDelta: {x: 332.25452, y: 8.1474}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &589615172
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 589615170}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8912fb793365c848a052dfd860d82a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StaminaBar
-  StaminaSlider: {fileID: 589615173}
-  player: {fileID: 930957858}
 --- !u!114 &589615173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1104,6 +1091,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 589615170}
   m_CullTransparentMesh: 1
+--- !u!114 &589615176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589615170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c15de6a26ab23245ae3fddef4816de9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThristBar
+  ThristSlider: {fileID: 589615173}
+  player: {fileID: 930957858}
 --- !u!1 &767447881
 GameObject:
   m_ObjectHideFlags: 0
@@ -1358,7 +1359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1519,13 +1520,17 @@ MonoBehaviour:
   timeForRunAgain: 1
   lastRunStopTime: 0
   maxStamina: 100
+  currentStamina: 0
   staminaDrain: 15
   staminaRecovery: 8
   maxThirst: 100
+  currentThirst: 0
   minutesForDrainAllThirst: 25
   maxHungry: 100
+  currentHungry: 0
   minutesForDrainAllHungry: 25
   maxHealth: 100
+  currentHealth: 0
 --- !u!54 &930957859
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1565,7 +1570,7 @@ GameObject:
   - component: {fileID: 1111280877}
   - component: {fileID: 1111280876}
   - component: {fileID: 1111280875}
-  - component: {fileID: 1111280874}
+  - component: {fileID: 1111280878}
   m_Layer: 5
   m_Name: HungryBar
   m_TagString: Untagged
@@ -1594,20 +1599,6 @@ RectTransform:
   m_AnchoredPosition: {x: -200, y: 19}
   m_SizeDelta: {x: 332.25452, y: 8.1474}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1111280874
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1111280872}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8912fb793365c848a052dfd860d82a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StaminaBar
-  StaminaSlider: {fileID: 1111280875}
-  player: {fileID: 930957858}
 --- !u!114 &1111280875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1697,6 +1688,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1111280872}
   m_CullTransparentMesh: 1
+--- !u!114 &1111280878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1111280872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 564dd8a16781b0c4fb309971e8aaa471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HungryBar
+  HungrySlider: {fileID: 1111280875}
+  player: {fileID: 930957858}
 --- !u!1 &1286427251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1884,7 +1889,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2113,7 +2118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9813727, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.9859786, b: 0.28490567, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
