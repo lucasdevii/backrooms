@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldManager : MonoBehaviour
@@ -13,9 +14,11 @@ public class WorldManager : MonoBehaviour
     
     [SerializeField] private Wall wallPrefabScript;
     [SerializeField] private Lamp lamp;
+
+    public static WorldManager Instance;
     
     public ulong seed = 4196283291932386;
-
+ 
     public Vector2Int playerChunk = new Vector2Int();
     public Vector2Int playerCell = new Vector2Int();
 
@@ -37,6 +40,8 @@ public class WorldManager : MonoBehaviour
 
     void Awake()
     {
+        if (Instance == null) Instance = this;
+    
         int matrizSize = (renderDistance * 2) + 1;
 
         chunkSize = cellSize * cellsQuantityInChunk;
@@ -312,5 +317,7 @@ public class WorldManager : MonoBehaviour
 
         return new Vector2Int(randomX, randomY);
     }
+
+
 
 }

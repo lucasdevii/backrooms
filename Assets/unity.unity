@@ -2175,7 +2175,7 @@ MonoBehaviour:
   playerPosition: {fileID: 930957854}
   wallPrefabScript: {fileID: 1513516132019481781, guid: 9da886937f759ab4592d4b1f2c28f032, type: 3}
   lamp: {fileID: 5693940361997200094, guid: 883823702ac64154c87a96c4f4c23b9d, type: 3}
-  seed: 4196283297238
+  seed: 4196277076355
   playerChunk: {x: 0, y: 0}
   playerCell: {x: 0, y: 0}
   renderDistance: 1
