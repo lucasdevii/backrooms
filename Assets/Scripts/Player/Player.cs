@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     // References
     [SerializeField] private GameObject flashlight;
 
+    public static Player Instance { get; private set; }
 
     // Movement
     [SerializeField] private float speed = 10;
@@ -69,6 +70,7 @@ public class Player : MonoBehaviour
 
         currentStamina = maxStamina;
         currentHealth = maxHealth;
+        Instance = this;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -159,7 +161,7 @@ public class Player : MonoBehaviour
 
         direction.Normalize();
 
-        UpdateStamina(ref currentSpeed);
+        UpdateStamina(currentSpeed);
 
         Vector3 moveDirection =
             transform.forward * direction.z +
@@ -178,7 +180,7 @@ public class Player : MonoBehaviour
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
     
-    void UpdateStamina(ref float currentSpeed)
+    void UpdateStamina(float currentSpeed)
     {
         // Acabou de parar de correr?
         if (wasRunning && !isRunning)

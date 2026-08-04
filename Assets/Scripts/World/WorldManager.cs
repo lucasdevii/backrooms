@@ -318,6 +318,12 @@ public class WorldManager : MonoBehaviour
         return new Vector2Int(randomX, randomY);
     }
 
+    public Chunk GetChunk(Vector2Int chunkPosition)
+    {
+        int row = chunkPosition.y - (playerChunk.y - (matriz.GetLength(0) / 2));
+        int col = chunkPosition.x - (playerChunk.x - (matriz.GetLength(1) / 2));
 
+        return matriz[row, col];
+    }
 
 }
