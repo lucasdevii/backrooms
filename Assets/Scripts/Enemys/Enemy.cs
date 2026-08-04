@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -25,6 +26,10 @@ public class Enemy : MonoBehaviour
     private float moveSpeed = 8f;
     private float runningAcrescent = 10f;
     private Vector3 direction;
+
+
+    //Visão
+    private int distanceOfPerception = 5; // Distância da visão
 
     //Estaods
     private enum EnemyState{
@@ -120,6 +125,69 @@ public class Enemy : MonoBehaviour
     }
 
     // -----------------  Logica de movimentacao  -------------------
+
+    private void RemoveDeadEndPaths(Chunk chunk, Vector2Int currentCell, List<Vector2Int> neighboors)
+    {
+        for (int i = neighboors.Count - 1; i >= 0; i--)
+        {
+            int dx = neighboors[i].x - currentCell.x;
+            int dy = neighboors[i].y - currentCell.y;
+
+            for (int j = 0; j <= distanceOfPerception; j++)
+            {
+                int x = neighboors[i].x + (dx * j);
+                int y = neighboors[i].y + (dy * j);
+
+                // Se saiu da chunk, não remove o caminho
+                // Não dá para afirmar que é um beco
+                if (!chunk.IsValidCell(x, y))
+                    break;
+
+                Cell targetCell = chunk.GetCell(x, y);
+                HashSet<WorldManager.Direction> openedWalls = targetCell.GetOpenedWalls();
+
+                // Encontrou uma saída lateral
+                if ((dx != 0) &&
+                    (openedWalls.Contains(WorldManager.Direction.Top) ||
+                    openedWalls.Contains(WorldManager.Direction.Bottom)))
+                {
+                    break;
+                }
+
+                if ((dy != 0) &&
+                    (openedWalls.Contains(WorldManager.Direction.Left) ||
+                    openedWalls.Contains(WorldManager.Direction.Right)))
+                {
+                    break;
+                }
+
+                // Não conseguiu enxergar o fim do corredor
+                if (
+                    (dx == 1 && j == distanceOfPerception && openedWalls.Contains(WorldManager.Direction.Right)) ||
+                    (dx == -1 && j == distanceOfPerception && openedWalls.Contains(WorldManager.Direction.Left)) ||
+                    (dy == 1 && j == distanceOfPerception && openedWalls.Contains(WorldManager.Direction.Bottom)) ||
+                    (dy == -1 && j == distanceOfPerception && openedWalls.Contains(WorldManager.Direction.Top))
+                )
+                {
+                    break;
+                }
+
+                // Encontrou o fim do corredor
+                bool deadEnd =
+                    (dx == 1 && !openedWalls.Contains(WorldManager.Direction.Right)) ||
+                    (dx == -1 && !openedWalls.Contains(WorldManager.Direction.Left)) ||
+                    (dy == 1 && !openedWalls.Contains(WorldManager.Direction.Bottom)) ||
+                    (dy == -1 && !openedWalls.Contains(WorldManager.Direction.Top));
+
+                if (deadEnd)
+                {
+                    neighboors.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+    }
+    
     private Vector2Int ChooseNextTargetCell()
     {
         //Verifica se ja visitou todas as casas adjacentes
@@ -128,27 +196,29 @@ public class Enemy : MonoBehaviour
 
         Chunk chunk = WorldManager.Instance.GetChunk(currentChunk);
 
-        List<Vector2Int> visitedNeighboors = chunk.GetValidCellNeighboorsIndex(currentCell);
+        List<Vector2Int> neighboors = chunk.GetValidCellNeighboorsIndex(currentCell);
 
         for(int i = 0; i < walkedCells.Count; i++)
         {
-            if(visitedNeighboors.Contains(walkedCells[i]))
+            if(neighboors.Contains(walkedCells[i]))
             {
-                visitedNeighboors.Remove(walkedCells[i]);
+                neighboors.Remove(walkedCells[i]);
             }
         }
 
-        //Se não tiver celulas novas volta para a ultima celula visitada (backtracking)
-        if (visitedNeighboors.Count == 0) return new Vector2Int(walkedCells[walkedCells.Count - 1].x, walkedCells[walkedCells.Count - 1].y);
+        RemoveDeadEndPaths(chunk, currentCell, neighboors);
 
-        float percentage = 1 / visitedNeighboors.Count;
+        //Se não tiver celulas novas volta para a ultima celula visitada (backtracking)
+        if (neighboors.Count == 0) return new Vector2Int(walkedCells[walkedCells.Count - 1].x, walkedCells[walkedCells.Count - 1].y);
+
+        float percentage = 1 / neighboors.Count;
         float value = Noise.DefaultNoise(chunk.seed, currentCell.y, currentCell.x, 275);
 
-        for(int i = 0; i < visitedNeighboors.Count; i++)
+        for(int i = 0; i < neighboors.Count; i++)
         {
             if(value < percentage * (i + 1))
             {
-                return visitedNeighboors[i];
+                return neighboors[i];
             }
         }
 

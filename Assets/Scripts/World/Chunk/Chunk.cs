@@ -163,6 +163,17 @@ public class Chunk
 
         return validNeighboors;
     }
+
+    public bool IsValidCell(int x, int y)
+    {
+        if(x > internalGrid.GetLength(0)) return false;
+        else if(x < 0) return false;
+
+        if(y > internalGrid.GetLength(1)) return false;
+        else if(y < 0) return false;
+
+        return true;
+    }
 }
 // -------------- IDEIA ---------------
 // Chunk
