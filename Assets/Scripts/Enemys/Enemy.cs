@@ -68,11 +68,7 @@ public class Enemy : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("player"))
-        {
-            Player player = collision.gameObject.GetComponent<Player>();
-            if(player != null) GiveDamage(player);
-        }
+
     }
 
     void GiveDamage(Player player)

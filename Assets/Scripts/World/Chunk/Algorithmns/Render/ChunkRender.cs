@@ -39,16 +39,16 @@ public static class ChunkRender
             groundAndCeilingSize
         );
 
-        for (int row = 0; row < chunk.GetData().GetLength(1); row++)
+        for (int x = 0; x < chunk.GetData().GetLength(0); x++)
         {
-            for (int col = 0; col < chunk.GetData().GetLength(0); col++)
+            for (int y = 0; y < chunk.GetData().GetLength(1); y++)
             {
                 Vector2 cellPosition = new Vector2(
-                    chunkOrigin.x + col * cellSize,
-                    chunkOrigin.y - row * cellSize
+                    chunkOrigin.x + x * cellSize,
+                    chunkOrigin.y - y * cellSize
                 );
 
-                Cell cell = chunk.GetData()[col, row];
+                Cell cell = chunk.GetData()[x, y];
 
                 WallsRender.Render(
                     chunkObject,

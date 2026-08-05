@@ -11,15 +11,15 @@ public static class LampsRender
     {
         float heightOfLamps = WorldManager.wallHeight - (WorldManager.groundAndCeilingThickness / 2);
 
-        for (int row = 0; row < chunk.GetData().GetLength(0); row++)
+        for (int x = 0; x < chunk.GetData().GetLength(0); x++)
         {
-            float currentCellY = chunkOrigin.y - (row * WorldManager.cellSize) - WorldManager.cellSize;
+            float currentCellX = chunkOrigin.x + (x * WorldManager.cellSize);
 
-            for (int col = 0; col < chunk.GetData().GetLength(1); col++)
+            for (int y = 0; y < chunk.GetData().GetLength(1); y++)
             {
-                float currentCellX = chunkOrigin.x + (col * WorldManager.cellSize) + WorldManager.cellSize;
+                float currentCellY = chunkOrigin.y - (y * WorldManager.cellSize);
 
-                Cell cellOfLight = chunk.GetCell(col, row);
+                Cell cellOfLight = chunk.GetCell(x, y);
                 bool hasLight = cellOfLight.hasLight;
 
                 Lamp newLamp = Object.Instantiate(lamp);

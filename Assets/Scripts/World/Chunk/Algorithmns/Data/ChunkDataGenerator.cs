@@ -89,14 +89,14 @@ public static class ChunkDataGenerator
 
     public static void InitializeMatrix(Cell[,] matrix, ulong seed)
     {
-        int rows = matrix.GetLength(0);
-        int cols = matrix.GetLength(1);
+        int width = matrix.GetLength(0);
+        int height = matrix.GetLength(1);
 
-        for (int y = 0; y < rows; y++)
+        for (int x = 0; x < width; x++)
         {
-            for (int x = 0; x < cols; x++)
+            for (int y = 0; y < height; y++)
             {
-                matrix[y, x] = new Cell(seed, y, x);
+                matrix[x, y] = new Cell(seed, y, x);
             }
         }
     }
@@ -127,23 +127,23 @@ public static class ChunkDataGenerator
 
         if(dx == 1 && dy == 0)//Se o movimento for para a direita
         {
-            matrix[position1.y, position1.x].SetOpenedWalls(WorldManager.Direction.Right);
-            matrix[position2.y, position2.x].SetOpenedWalls(WorldManager.Direction.Left);
+            matrix[position1.x, position1.y].SetOpenedWalls(WorldManager.Direction.Right);
+            matrix[position2.x, position2.y].SetOpenedWalls(WorldManager.Direction.Left);
         }
         else if(dx == -1 && dy == 0)//Se o movimento for para a esquerda
         {
-            matrix[position1.y, position1.x].SetOpenedWalls(WorldManager.Direction.Left);
-            matrix[position2.y, position2.x].SetOpenedWalls(WorldManager.Direction.Right);
+            matrix[position1.x, position1.y].SetOpenedWalls(WorldManager.Direction.Left);
+            matrix[position2.x, position2.y].SetOpenedWalls(WorldManager.Direction.Right);
         }
         else if(dx == 0 && dy == 1)//Se o movimento for para cima
         {
-            matrix[position1.y, position1.x].SetOpenedWalls(WorldManager.Direction.Top);
-            matrix[position2.y, position2.x].SetOpenedWalls(WorldManager.Direction.Bottom);
+            matrix[position1.x, position1.y].SetOpenedWalls(WorldManager.Direction.Top);
+            matrix[position2.x, position2.y].SetOpenedWalls(WorldManager.Direction.Bottom);
         }
         else if(dx == 0 && dy == -1)//Se o movimento for para baixo
         {
-            matrix[position1.y, position1.x].SetOpenedWalls(WorldManager.Direction.Bottom);
-            matrix[position2.y, position2.x].SetOpenedWalls(WorldManager.Direction.Top);
+            matrix[position1.x, position1.y].SetOpenedWalls(WorldManager.Direction.Bottom);
+            matrix[position2.x, position2.y].SetOpenedWalls(WorldManager.Direction.Top);
         }
     }
 
@@ -304,12 +304,12 @@ public static class ChunkDataGenerator
             int maxX = Mathf.Clamp(positionOfRoom.x + radiusRoom, positionOfRoom.x, chunk.GetLength(0));
             int maxY = Mathf.Clamp(positionOfRoom.y + radiusRoom, positionOfRoom.y, chunk.GetLength(1));
 
-            for(int row = initY; row < maxY; row++)
+            for(int y = initY; y < maxY; y++)
             {
-                for(int col = initX; col < maxX; col++)
+                for(int x = initX; x < maxX; x++)
                 {
                     //Abre todas as portas, transformando-a em uma sala
-                    chunk[row, col].OpenAllWalls();
+                    chunk[x, y].OpenAllWalls();
                 }
             }
 

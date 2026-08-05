@@ -78,15 +78,15 @@ public class Chunk
         {
             if(direction == WorldManager.Direction.Right)
             {
-                internalGrid[point, sizeOfChunk - 1].SetOpenedWalls(WorldManager.Direction.Right);
-                otherChunk.internalGrid[point, 0].SetOpenedWalls(WorldManager.Direction.Left);
+                internalGrid[sizeOfChunk - 1, point].SetOpenedWalls(WorldManager.Direction.Right);
+                otherChunk.internalGrid[0, point].SetOpenedWalls(WorldManager.Direction.Left);
                 break;
             }
             else if(direction == WorldManager.Direction.Bottom)
             {
-                internalGrid[sizeOfChunk - 1, point].SetOpenedWalls(WorldManager.Direction.Bottom);
-                    otherChunk.internalGrid[0, point].SetOpenedWalls(WorldManager.Direction.Top);
-                    break;
+                internalGrid[point, sizeOfChunk - 1].SetOpenedWalls(WorldManager.Direction.Bottom);
+                otherChunk.internalGrid[point, 0].SetOpenedWalls(WorldManager.Direction.Top);
+                break;
             }
         }
     }
@@ -115,14 +115,14 @@ public class Chunk
         return internalGrid;
     }
 
-    public Cell GetCell(int row, int col)
+    public Cell GetCell(int x, int y)
     {
-        if(row < 0 || row >= cellsQuantity || col < 0 || col >= cellsQuantity)
+        if(x < 0 || x >= cellsQuantity || y < 0 || y >= cellsQuantity)
         {
             throw new ArgumentOutOfRangeException("A coluna ou linha da celula não existe");
         }
 
-        return internalGrid[row, col].GetCell();
+        return internalGrid[x, y].GetCell();
     }
 
     public void SetChunkGameObject(GameObject chunkGameObject)
@@ -149,16 +149,16 @@ public class Chunk
 
         // -------- Verificações se a célula existe no grid interno ---------
 
-        if(cellIndex.x - 1 < 0 && neighboors.Contains(WorldManager.Direction.Left)) 
+        if(cellIndex.x - 1 >= 0 && neighboors.Contains(WorldManager.Direction.Left)) 
             validNeighboors.Add(new Vector2Int(cellIndex.x - 1, cellIndex.y)); 
 
-        if(cellIndex.x + 1 >= cellsQuantity && neighboors.Contains(WorldManager.Direction.Right)) 
+        if(cellIndex.x + 1 < cellsQuantity && neighboors.Contains(WorldManager.Direction.Right)) 
             validNeighboors.Add(new Vector2Int(cellIndex.x + 1, cellIndex.y));
 
-        if(cellIndex.y - 1 < 0 && neighboors.Contains(WorldManager.Direction.Top)) 
+        if(cellIndex.y - 1 >= 0 && neighboors.Contains(WorldManager.Direction.Top)) 
             validNeighboors.Add(new Vector2Int(cellIndex.x, cellIndex.y - 1));
 
-        if(cellIndex.y + 1 >= cellsQuantity && neighboors.Contains(WorldManager.Direction.Bottom)) 
+        if(cellIndex.y + 1 < cellsQuantity && neighboors.Contains(WorldManager.Direction.Bottom)) 
             validNeighboors.Add(new Vector2Int(cellIndex.x, cellIndex.y + 1));
 
         return validNeighboors;
@@ -166,11 +166,8 @@ public class Chunk
 
     public bool IsValidCell(int x, int y)
     {
-        if(x > internalGrid.GetLength(0)) return false;
-        else if(x < 0) return false;
-
-        if(y > internalGrid.GetLength(1)) return false;
-        else if(y < 0) return false;
+        if(x < 0 || x >= internalGrid.GetLength(0)) return false;
+        if(y < 0 || y >= internalGrid.GetLength(1)) return false;
 
         return true;
     }
