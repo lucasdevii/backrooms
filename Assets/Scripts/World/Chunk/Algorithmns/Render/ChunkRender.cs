@@ -49,6 +49,7 @@ public static class ChunkRender
                 );
 
                 Cell cell = chunk.GetData()[x, y];
+                cell.SetWorldOrigin(new Vector3(cellPosition.x, 0f, cellPosition.y));
 
                 WallsRender.Render(
                     chunkObject,

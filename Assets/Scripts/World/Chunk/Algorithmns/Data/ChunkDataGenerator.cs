@@ -309,13 +309,39 @@ public static class ChunkDataGenerator
                 for(int x = initX; x < maxX; x++)
                 {
                     //Abre todas as portas, transformando-a em uma sala
-                    chunk[x, y].OpenAllWalls();
+                    Vector2Int cellPosition = new Vector2Int(x, y);
+                    OpenRoomCell(cellPosition, chunk);
                 }
             }
+        }
+    }
 
+    private static void OpenRoomCell(Vector2Int position, Cell[,] chunk)
+    {
+        Cell cell = chunk[position.x, position.y];
+        cell.OpenAllWalls();
+
+        int size = chunk.GetLength(0);
+
+        if (position.x - 1 >= 0)
+        {
+            chunk[position.x - 1, position.y].SetOpenedWalls(WorldManager.Direction.Right);
         }
 
+        if (position.x + 1 < size)
+        {
+            chunk[position.x + 1, position.y].SetOpenedWalls(WorldManager.Direction.Left);
+        }
 
+        if (position.y - 1 >= 0)
+        {
+            chunk[position.x, position.y - 1].SetOpenedWalls(WorldManager.Direction.Bottom);
+        }
+
+        if (position.y + 1 < size)
+        {
+            chunk[position.x, position.y + 1].SetOpenedWalls(WorldManager.Direction.Top);
+        }
     }
 
     public static void GenerateRooms(Cell[,] chunk, ulong chunkSeed)

@@ -30,8 +30,8 @@ public class WorldManager : MonoBehaviour
     private int chunkSize; //Tamanho de cada chunk em unidades de escala do game
 
     //-------------- CÉLULAs ---------------
-    public static int cellSize = 5;
-    public static int cellsQuantityInChunk = 20; 
+    public static int cellSize = 5; 
+    public static int cellsQuantityInChunk = 20;  
 
     public static float wallHeight = 6f;
     private Vector3 groundAndCeilingSize; //Precisa ter o mesmo tamanho que o chunkSize
@@ -101,7 +101,6 @@ public class WorldManager : MonoBehaviour
 
         if (currentChunkPosition != playerChunk)
         {
-            Debug.Log($"Mudou de chunk | current chunk: {currentChunkPosition.x}, {currentChunkPosition.y} | ");
             int dx = playerChunk.x - currentChunkPosition.x;
             int dy = playerChunk.y - currentChunkPosition.y;
 
@@ -134,9 +133,6 @@ public class WorldManager : MonoBehaviour
         );
 
         bool changed = currentCellPosition != playerCell;
-
-        if (changed)
-            Debug.Log($"Mudou de célula | {currentCellPosition}");
 
         playerCell = currentCellPosition;
         return changed;
@@ -221,7 +217,6 @@ public class WorldManager : MonoBehaviour
             for(int row = 0; row < matriz.GetLength(0); row++)
             {
                 Chunk chunk = matriz[row, 0];
-                Debug.Log($"Renderizando chunk {chunk.position}");
                 Destroy(chunk.GetChunkGameObject());
             }
         }
@@ -230,7 +225,6 @@ public class WorldManager : MonoBehaviour
             for(int row = 0; row < matriz.GetLength(0); row++)
             {
                 Chunk chunk = matriz[row, matriz.GetLength(1) - 1];
-                Debug.Log($"Renderizando chunk {chunk.position}");
                 Destroy(chunk.GetChunkGameObject());
             }
         }
@@ -239,7 +233,6 @@ public class WorldManager : MonoBehaviour
             for(int col = 0; col < matriz.GetLength(1); col++)
             {
                 Chunk chunk = matriz[0, col];
-                Debug.Log($"Renderizando chunk {chunk.position}");
                 Destroy(chunk.GetChunkGameObject());
             }
         }
@@ -248,7 +241,6 @@ public class WorldManager : MonoBehaviour
             for(int col = 0; col < matriz.GetLength(1); col++)
             {
                 Chunk chunk = matriz[matriz.GetLength(0) - 1, col];
-                Debug.Log($"Renderizando chunk {chunk.position}");
                 Destroy(chunk.GetChunkGameObject());
             }
         }

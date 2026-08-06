@@ -12,6 +12,7 @@ public static class WallsRender
     )
     {
         HashSet<WorldManager.Direction> openedWalls = cell.GetOpenedWalls();
+        Vector3 cellOrigin = cell.GetWorldOrigin();
 
         // Parede direita
         if (!openedWalls.Contains(WorldManager.Direction.Right))
@@ -23,8 +24,8 @@ public static class WallsRender
 
             wall.Inicialize(
                 new Vector2(
-                    cellPosition.x + (cellSize / 2f),
-                    cellPosition.y
+                    cellOrigin.x + (cellSize / 2f),
+                    cellOrigin.z
                 ),
                 cellSize + Wall.thickness,
                 WorldManager.wallHeight,
@@ -42,8 +43,8 @@ public static class WallsRender
 
             wall.Inicialize(
                 new Vector2(
-                    cellPosition.x,
-                    cellPosition.y - (cellSize / 2f)
+                    cellOrigin.x,
+                    cellOrigin.z - (cellSize / 2f)
                 ),
                 cellSize + Wall.thickness,
                 WorldManager.wallHeight,
