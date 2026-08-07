@@ -10,7 +10,7 @@ public static class Patrol
         Verifica se o player esta no centro da celula
         Repete
     */
-    public static List<Cell> GetValidNeighboor(Chunk chunk, Cell currentCell, List<Vector2Int> walkedCells)
+    public static List<Cell> GetValidNeighboors(Chunk chunk, Cell currentCell, List<Vector2Int> walkedCells)
     {
         //Pegar todos os caminhos validos
         //Pegar os caminhos ainda não visitados
@@ -48,18 +48,33 @@ public static class Patrol
         ];
     }
 
+    public static Cell GetNextCellForPatrol(
+        Chunk chunk,
+        Cell currentCell,
+        List<Vector2Int> walkedCells,
+        int maxHistory)
+    {
+        List<Cell> valid = GetValidNeighboors(chunk, currentCell, walkedCells);
+
+        Cell next = ChooseNextCell(valid, walkedCells, chunk);
+
+        UpdateHistory(walkedCells, currentCell, maxHistory);
+
+        return next;
+    }
+
     public static Vector3 GetDirection(Vector3 from, Vector3 to)
     {
         return (to - from).normalized;
     }
 
-    public static void MovementTowards(Vector3 position, Cell targetCell, Rigidbody rb, float moveSpeed)
+    public static Vector3 GetVelocityDirection(Vector3 position, Cell targetCell, float moveSpeed)
     {
         //Pega a direção do centro da celula e aplica uma força para o inimigo ir até ela
         Vector3 targetPosition = targetCell.GetWorldCenter();
         Vector3 direction = GetDirection(position, targetPosition);
 
-        rb.linearVelocity = direction * moveSpeed;
+        return direction * moveSpeed;
     }
 
     public static bool VerifyOnTarget(Vector3 position, Cell targetCell)
@@ -70,7 +85,7 @@ public static class Patrol
         return Vector3.Distance(position, cellCenter) < 0.2f;
     }
 
-    public static void UpdateHistory(List<Vector2Int> list, Cell newCell, int maxListSize)
+    private static void UpdateHistory(List<Vector2Int> list, Cell newCell, int maxListSize)
     {
         if(list.Count >= maxListSize)
             list.RemoveAt(0);    

@@ -27,7 +27,7 @@ public class WorldManager : MonoBehaviour
     public Chunk[,] matriz;
 
     //--------------- CHUNK ----------------,,
-    private int chunkSize; //Tamanho de cada chunk em unidades de escala do game
+    public int chunkSize; //Tamanho de cada chunk em unidades de escala do game
 
     //-------------- CÉLULAs ---------------
     public static int cellSize = 5; 
@@ -317,5 +317,4 @@ public class WorldManager : MonoBehaviour
 
         return matriz[row, col];
     }
-
 }
