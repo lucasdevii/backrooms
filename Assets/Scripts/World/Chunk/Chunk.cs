@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Chunk
 {
-    // Removido o 'private' e adicionado 'public' com 'protected set'
     public ulong worldSeed { get; protected set; }
     public ulong seed { get; protected set; } 
     public int cellsQuantity { get; protected set; } // Também transformada em propriedade de leitura
@@ -170,6 +167,17 @@ public class Chunk
         if(y < 0 || y >= internalGrid.GetLength(1)) return false;
 
         return true;
+    }
+
+    public void SetBlackout(bool value)
+    {
+        for(int y = 0; y < internalGrid.GetLength(0); y++)
+        {
+            for(int x = 0; x < internalGrid.GetLength(1); x++)
+            {
+                internalGrid[x, y].SetLampState(!value);
+            }
+        }
     }
 }
 // -------------- IDEIA ---------------

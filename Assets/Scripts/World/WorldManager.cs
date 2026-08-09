@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class WorldManager : MonoBehaviour
@@ -36,6 +37,10 @@ public class WorldManager : MonoBehaviour
     public static float wallHeight = 6f;
     private Vector3 groundAndCeilingSize; //Precisa ter o mesmo tamanho que o chunkSize
     public static float groundAndCeilingThickness = 0.5f;
+
+    //-------------- Events ----------------
+
+    public bool isBlackout = false;
   
 
     void Awake()
@@ -64,6 +69,8 @@ public class WorldManager : MonoBehaviour
         FillInMatrizOfChunks();
         ChunkRender.ConnectChunks(matriz);
         InstantiateChunksInWorld();
+
+        StartCoroutine(BlackoutEvent.RollBlackoutChance());
     }
 
     // Update is called once before the first execution of Update after the MonoBehaviour is created
@@ -304,8 +311,8 @@ public class WorldManager : MonoBehaviour
 
     public Vector2Int GetRandomChunk()
     {
-        int randomX = Random.Range(0, matriz.GetLength(0) - 1);
-        int randomY = Random.Range(0, matriz.GetLength(1) - 1);
+        int randomX = UnityEngine.Random.Range(0, matriz.GetLength(0) - 1);
+        int randomY = UnityEngine.Random.Range(0, matriz.GetLength(1) - 1);
 
         return new Vector2Int(randomX, randomY);
     }
@@ -316,5 +323,20 @@ public class WorldManager : MonoBehaviour
         int col = chunkPosition.x - (playerChunk.x - (matriz.GetLength(1) / 2));
 
         return matriz[row, col];
+    }
+    public void SetBlackout(bool isBlackout)
+    {
+        if(this.isBlackout != isBlackout)
+        {
+            this.isBlackout = isBlackout;
+
+            for (int y = 0; y < matriz.GetLength(0); y++)
+            {
+                for (int x = 0; x < matriz.GetLength(1); x++)
+                {
+                    matriz[x,y].SetBlackout(this.isBlackout);
+                }
+            }
+        }
     }
 }

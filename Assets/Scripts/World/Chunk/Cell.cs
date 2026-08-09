@@ -16,7 +16,10 @@ public class Cell
     public Cell(ulong chunkSeed, int row, int col)
     {
         this.chunkSeed = chunkSeed;
+        
         openedWalls = new HashSet<WorldManager.Direction>();
+        openedNeighboorsIndex = new HashSet<Vector2Int>();
+
         position.x = col;
         position.y = row;
     }
@@ -95,7 +98,12 @@ public class Cell
     public void SetLightShadow(bool value)
     {
         hasShadow = value;
-        light.SetShadow(value);
+        
+        if(light != null)
+        {
+            light.SetShadow(value);
+        }
+        
     }
 
     public void SetLightObject(Lamp light)
@@ -108,4 +116,12 @@ public class Cell
         return light;
     }
     
+    public void SetLampState(bool value)
+    {
+        //Se tiver luz naturalmente na celula
+        if(light != null)
+        {
+            light.enabled = value;
+        }
+    }
 }

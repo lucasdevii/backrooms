@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\UI\Bars\HungryBar.cs" />
     <Compile Include="Assets\Scripts\Enviropment\Lamp.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
+    <Compile Include="Assets\Scripts\World\Chunk\Events\BlackoutEvent.cs" />
     <Compile Include="Assets\Scripts\World\WorldManager.cs" />
     <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\CeilingRender.cs" />
     <Compile Include="Assets\Scripts\Enemys\Patrol.cs" />
