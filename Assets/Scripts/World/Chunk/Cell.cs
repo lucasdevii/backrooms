@@ -118,10 +118,9 @@ public class Cell
     
     public void SetLampState(bool value)
     {
-        //Se tiver luz naturalmente na celula
-        if(light != null)
+        if (light != null)
         {
-            light.enabled = value;
+            light.SetLight(value);
         }
     }
 }

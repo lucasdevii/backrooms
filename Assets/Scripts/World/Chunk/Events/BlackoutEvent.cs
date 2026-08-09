@@ -4,8 +4,8 @@ using UnityEngine;
 
 public static class BlackoutEvent 
 { 
-    private static float chanceOfBlackout = 0.4f; 
-    private static float timerForTrying = 2f; 
+    private static float chanceOfBlackout = 0.007f; 
+    private static float timerForTrying = 10f; 
     private static int minTimeWithBlackout = 5;
     private static int maxTimeWithBlackout = 60;
 
