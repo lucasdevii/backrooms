@@ -11,7 +11,6 @@ public static class BlackoutEvent
 
     public static IEnumerator RollBlackoutChance() 
     { 
-        
         while (true)
         {
             yield return new WaitForSeconds(timerForTrying);
@@ -34,6 +33,5 @@ public static class BlackoutEvent
                 WorldManager.Instance.SetBlackout(false);
             }
         }
-        
     } 
 }

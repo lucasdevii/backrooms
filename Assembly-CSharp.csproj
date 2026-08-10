@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\UI\Bars\ThristBar.cs" />
     <Compile Include="Assets\Scripts\Camera\MainCamera.cs" />
     <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Data\ChunkDataGenerator.cs" />
+    <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\ItemsRender.cs" />
     <Compile Include="Assets\Scripts\Enemys\Enemy.cs" />
     <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\GroundRender.cs" />
     <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\WallsRender.cs" />
