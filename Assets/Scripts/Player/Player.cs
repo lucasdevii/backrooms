@@ -239,9 +239,17 @@ public class Player : MonoBehaviour
         currentHealth = Math.Clamp(currentHealth - damage, 0, maxHealth);
     }
 
-    void ReceiveCure()
+    void AddHealth(float value)
     {
-        
+        currentHealth += value;
+    }
+    void AddSatiety(float value)
+    {
+        currentHungry += value;
+    }
+    void AddHydratation(float value)
+    {
+        currentThirst += value;
     }
 
     void OnCollisionStay(Collision collision)

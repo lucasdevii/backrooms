@@ -123,4 +123,9 @@ public class Cell
             light.SetLight(value);
         }
     }
+
+    public void SetItemsInCell()
+    {
+        
+    }
 }
