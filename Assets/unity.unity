@@ -2176,6 +2176,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a32462c75b4aa244f8c005fbebd33c21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  rb: {fileID: 0}
+  moveSpeed: 2
+  walkedCells: []
+  maxListSize: 0
+  currentMode: 0
 --- !u!54 &1693626268
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2334,6 +2339,8 @@ MonoBehaviour:
   playerChunk: {x: 0, y: 0}
   playerCell: {x: 0, y: 0}
   renderDistance: 1
+  chunkSize: 0
+  isBlackout: 0
 --- !u!4 &1807507993
 Transform:
   m_ObjectHideFlags: 0

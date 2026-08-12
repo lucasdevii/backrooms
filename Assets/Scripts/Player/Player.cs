@@ -239,17 +239,18 @@ public class Player : MonoBehaviour
         currentHealth = Math.Clamp(currentHealth - damage, 0, maxHealth);
     }
 
-    void AddHealth(float value)
+    // ---------------- Sistema de nutrição ------------------
+    public void AddHealth(float value)
     {
-        currentHealth += value;
+        currentHealth +=  Math.Clamp(value, 0, maxHealth);
     }
-    void AddSatiety(float value)
+    public void AddSatiety(float value)
     {
-        currentHungry += value;
+        currentHungry +=  Math.Clamp(value, 0, maxHungry);
     }
-    void AddHydratation(float value)
+    public void AddHydratation(float value)
     {
-        currentThirst += value;
+        currentThirst += Math.Clamp(value, 0, maxThirst);
     }
 
     void OnCollisionStay(Collision collision)

@@ -1,5 +1,9 @@
-public class Supply
+using UnityEngine;
+
+public class Supply : MonoBehaviour
 {
+    [SerializeField] GameObject prefab;
+
     protected float fillHungry = 0;
     protected float fillThirst = 0;
     protected float fillHealth = 0;
@@ -7,12 +11,22 @@ public class Supply
     protected int quantityOfUses = 0;
     protected int maxUses = 1;
 
-    protected Use()
+    protected void SetValues(float hungry, float thirst, float health)
     {
-        player.AddHealth(fillHealth);
-        player.AddSatiety(fillHungry);
-        player.AddHydratation(fillThirst);
+        fillHungry = hungry;
+        fillThirst = thirst;
+        fillHealth = health;
+    }
+
+    protected void Use()
+    {
+        Player.Instance.AddHealth(fillHealth);
+        Player.Instance.AddSatiety(fillHungry);
+        Player.Instance.AddHydratation(fillThirst);
 
         quantityOfUses++;
+
+        if(quantityOfUses >= maxUses)
+            Destroy(gameObject);
     }
 }
