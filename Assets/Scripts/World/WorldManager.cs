@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WorldManager : MonoBehaviour
@@ -15,6 +16,8 @@ public class WorldManager : MonoBehaviour
     
     [SerializeField] private Wall wallPrefabScript;
     [SerializeField] private Lamp lamp;
+
+    [SerializeField] public List<SupplyData> supplies;
 
     public static WorldManager Instance;
     

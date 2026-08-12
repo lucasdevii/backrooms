@@ -1,2 +1,14 @@
 fileFormatVersion: 2
 guid: 87034c2ae34be094d8b109631459dd84
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - playerPosition: {fileID: 7991022815127749589, guid: 975c4dbc90bd7764b8d461ac924c70ff, type: 3}
+  - wallPrefabScript: {fileID: 1513516132019481781, guid: 9da886937f759ab4592d4b1f2c28f032, type: 3}
+  - lamp: {fileID: 5693940361997200094, guid: 883823702ac64154c87a96c4f4c23b9d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
