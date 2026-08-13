@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class SuppliesDataGenerator
 {
@@ -9,12 +10,26 @@ public static class SuppliesDataGenerator
         {
             for (int x = 0; x < matriz.GetLength(1); x++)
             {
-                float weight = 51.8f;
+                //Qual alimento será escolhido.
+                float weightSupplySelect = 51.8f;
                 
-                float value = Noise.DefaultNoise(chunkSeed, x, y, weight);
+                float supplySelectionValue = Noise.DefaultNoise(chunkSeed, x, y, weightSupplySelect);
 
-                //A GERAÇÃO POR ENQUANTO SERÁ ALEATORIA, ENT DUAS PESSOAS PODEM VER ITENS DIFERENTES NA CELULA
-                SupplyData supply = supplies[UnityEngine.Random.Range(0, supplies.Count)];
+                SupplyData supply = supplies[
+                    Mathf.FloorToInt(
+                        supplySelectionValue * supplies.Count
+                    )
+                ];
+
+                //Posição do alimento.
+                float weightSupplyPosition = 23.24f;
+
+                Vector2 supplyPosition = new Vector2(
+                    Noise.DefaultNoise(chunkSeed, x, y, weightSupplyPosition, 2) * supplies.Count,
+                    Noise.DefaultNoise(chunkSeed, x, y, weightSupplyPosition, 3) * supplies.Count
+                );
+
+                supply.SetPosition(supplyPosition);
                 
                 matriz[x,y].SetSupply(supply);
             }
