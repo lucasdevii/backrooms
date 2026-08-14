@@ -10,7 +10,8 @@ public class Cell
     private Vector3 worldOrigin;
     private HashSet<WorldManager.Direction> openedWalls;
     private HashSet<Vector2Int> openedNeighboorsIndex;
-    private List<SupplyData> supplies;
+    public List<SupplyData> suppliesData { get; private set; }
+    public List<Supply> suppliesObject { get; private set; }
 
     public bool hasLight;
     private bool hasShadow = false;
@@ -128,6 +129,7 @@ public class Cell
 
     public void SetSupply(SupplyData supply)
     {
-        supplies.Add(supply);
+        suppliesData.Add(supply);
+        suppliesObject.Add(new Supply(supply));
     }
 }

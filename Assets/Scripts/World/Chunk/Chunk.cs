@@ -24,6 +24,7 @@ public class Chunk
         ChunkDataGenerator.InitializeMatrix(internalGrid, seed);
         ChunkDataGenerator.Generate(internalGrid, seed, position);
         SuppliesDataGenerator.Generate(internalGrid, seed, WorldManager.Instance.supplies);
+        SuplliesRender.Generate(internalGrid);
     }
 
     

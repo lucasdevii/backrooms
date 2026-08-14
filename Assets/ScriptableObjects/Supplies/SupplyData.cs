@@ -9,13 +9,13 @@ public class SupplyData : ScriptableObject
     public float fillThirst;
     public float fillHealth;
 
-    private Vector2 position;
+    public Vector3 position;
 
     public int maxUses;
 
     public GameObject prefab;
 
-    public void SetPosition(Vector2 position)
+    public void SetPosition(Vector3 position)
     {
         this.position = position;
     }
