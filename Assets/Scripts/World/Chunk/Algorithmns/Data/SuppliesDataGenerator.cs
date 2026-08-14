@@ -10,6 +10,8 @@ public static class SuppliesDataGenerator
         {
             for (int x = 0; x < matriz.GetLength(1); x++)
             {
+                Cell cell = matriz[x, y].GetCell();
+
                 //Qual alimento será escolhido.
                 float weightSupplySelect = 51.8f;
                 
@@ -24,14 +26,16 @@ public static class SuppliesDataGenerator
                 //Posição do alimento.
                 float weightSupplyPosition = 23.24f;
 
-                Vector2 supplyPosition = new Vector2(
+                Vector3 supplyPosition = new Vector3(
                     Noise.DefaultNoise(chunkSeed, x, y, weightSupplyPosition, 2) * supplies.Count,
+                    Wall.thickness / 2 + 0.01f,
                     Noise.DefaultNoise(chunkSeed, x, y, weightSupplyPosition, 3) * supplies.Count
                 );
 
-                supply.SetPosition(supplyPosition);
+                Vector3 result = cell.GetWorldOrigin() + supplyPosition;
+                supply.SetPosition(result);
                 
-                matriz[x,y].SetSupply(supply);
+                cell.SetSupply(supply);
             }
         }
     }
