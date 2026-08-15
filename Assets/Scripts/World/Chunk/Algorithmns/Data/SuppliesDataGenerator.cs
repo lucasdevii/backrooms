@@ -6,10 +6,20 @@ public static class SuppliesDataGenerator
 {
     public static void Generate(Cell[,] matriz, ulong chunkSeed, List<SupplyData> supplies)
     {
+        if (supplies == null || supplies.Count == 0)
+        {
+            Debug.LogError("Lista de suprimentos vazia");
+            return;
+        }
+
+        
         for(int y = 0; y < matriz.GetLength(0); y++)
         {
             for (int x = 0; x < matriz.GetLength(1); x++)
             {
+                
+
+
                 Cell cell = matriz[x, y].GetCell();
 
                 //Qual alimento será escolhido.

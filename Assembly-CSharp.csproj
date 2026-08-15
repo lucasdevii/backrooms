@@ -65,7 +65,6 @@
     <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\GroundRender.cs" />
     <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\WallsRender.cs" />
     <Compile Include="Assets\Scripts\Generation.cs\Noise.cs" />
-    <Compile Include="Assets\Scripts\Items\Supplies\Supply.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\UI\Bars\StaminaBar.cs" />
     <Compile Include="Assets\Scripts\UI\Bars\HungryBar.cs" />

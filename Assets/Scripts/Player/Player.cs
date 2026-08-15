@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
     // Components
     private Rigidbody rb;
-
 
     // References
     [SerializeField] private GameObject flashlight;
@@ -15,7 +13,7 @@ public class Player : MonoBehaviour
     public static Player Instance { get; private set; }
 
     // Movement
-    [SerializeField] private float speed = 10;
+    [SerializeField] private float speed = 6;
     [SerializeField] private float jumpForce = 20;
 
     [SerializeField] private float runningAcrescent = 5;
@@ -53,7 +51,8 @@ public class Player : MonoBehaviour
 
 
     // State
-    private bool isRunning;
+    public bool isRunning;
+    public bool isWalking;
     private bool jumpRequested;
     private bool isGrounded;
     private bool flashlightIsOn;
@@ -123,6 +122,9 @@ public class Player : MonoBehaviour
 
         bool cooldownFinished =
             Time.time >= lastRunStopTime + timeForRunAgain;
+
+        isWalking = 
+            direction != Vector3.zero;
 
         isRunning =
             direction != Vector3.zero &&
