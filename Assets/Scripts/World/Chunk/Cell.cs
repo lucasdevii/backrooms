@@ -22,6 +22,8 @@ public class Cell
         
         openedWalls = new HashSet<WorldManager.Direction>();
         openedNeighboorsIndex = new HashSet<Vector2Int>();
+        suppliesData = new List<SupplyData>();
+        suppliesObject = new List<Supply>();
 
         position.x = col;
         position.y = row;
@@ -129,7 +131,9 @@ public class Cell
 
     public void SetSupply(SupplyData supply)
     {
+        if (supply == null)
+            return;
+
         suppliesData.Add(supply);
-        suppliesObject.Add(new Supply(supply));
     }
 }

@@ -1,28 +1,35 @@
-using System.Globalization;
 using UnityEngine;
 
 public class Supply : MonoBehaviour
 {
-    [SerializeField] GameObject prefab;
+    [SerializeField] private SupplyData data;
+    [SerializeField] private int quantityOfUses;
 
-    SupplyData data = new SupplyData();
+    public SupplyData Data => data;
 
-    int quantityOfUses = 0;
-
-    public Supply(SupplyData supplyData)
+    public void Initialize(SupplyData supplyData)
     {
         data = supplyData;
+
+        if (data != null)
+        {
+            gameObject.name = data.itemName;
+            transform.position = data.position;
+        }
     }
 
     public void Use()
     {
+        if (data == null)
+            return;
+
         Player.Instance.AddHealth(data.fillHealth);
         Player.Instance.AddSatiety(data.fillHungry);
         Player.Instance.AddHydratation(data.fillThirst);
 
         quantityOfUses++;
 
-        if(quantityOfUses >= data.maxUses)
+        if (quantityOfUses >= data.maxUses)
             Destroy(gameObject);
     }
 }

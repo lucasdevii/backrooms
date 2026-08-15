@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public static class SuplliesRender
@@ -12,9 +10,18 @@ public static class SuplliesRender
             {
                 Cell cell = matriz[x, y].GetCell();
 
-                foreach (Supply item in cell.suppliesObject)
+                foreach (SupplyData item in cell.suppliesData)
                 {
-                    GameObject.Instantiate(item, item.position, Quaternion.identity);
+                    if (item == null || item.prefab == null)
+                        continue;
+
+                    GameObject spawnedItem = Object.Instantiate(item.prefab, item.position, Quaternion.identity);
+                    Supply supplyComponent = spawnedItem.GetComponent<Supply>();
+
+                    if (supplyComponent != null)
+                    {
+                        supplyComponent.Initialize(item);
+                    }
                 }
             }
         }

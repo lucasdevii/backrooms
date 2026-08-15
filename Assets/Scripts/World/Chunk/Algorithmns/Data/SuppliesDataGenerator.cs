@@ -17,11 +17,13 @@ public static class SuppliesDataGenerator
                 
                 float supplySelectionValue = Noise.DefaultNoise(chunkSeed, x, y, weightSupplySelect);
 
-                SupplyData supply = supplies[
+                SupplyData template = supplies[
                     Mathf.FloorToInt(
                         supplySelectionValue * supplies.Count
                     )
                 ];
+
+                SupplyData supply = UnityEngine.Object.Instantiate(template);
 
                 //Posição do alimento.
                 float weightSupplyPosition = 23.24f;
