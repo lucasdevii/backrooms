@@ -72,6 +72,7 @@ public class WorldManager : MonoBehaviour
         FillInMatrizOfChunks();
         ChunkRender.ConnectChunks(matriz);
         InstantiateChunksInWorld();
+        SuplliesRender.GenerateInChunks(matriz);
 
         StartCoroutine(BlackoutEvent.RollBlackoutChance());
     }
@@ -179,8 +180,10 @@ public class WorldManager : MonoBehaviour
         {
             for (int col = 0; col < matriz.GetLength(1); col++)
             {
+                Chunk chunk = matriz[row, col];
+
                 ChunkRender.Render(
-                    matriz[row, col],
+                    chunk,
                     wallPrefabScript,
                     cellSize,
                     chunkSize,

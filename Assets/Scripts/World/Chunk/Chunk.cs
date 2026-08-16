@@ -19,21 +19,39 @@ public class Chunk
         this.cellsQuantity = WorldManager.cellsQuantityInChunk;
         internalGrid = new Cell[cellsQuantity, cellsQuantity];
 
-        seed = Generateseed();
+        seed = GenerateSeed();
 
         ChunkDataGenerator.InitializeMatrix(internalGrid, seed);
         ChunkDataGenerator.Generate(internalGrid, seed, position);
+
+        float chunkWorldSize = WorldManager.cellSize * WorldManager.cellsQuantityInChunk;
+        Vector2 chunkOrigin = new Vector2(
+            position.x * chunkWorldSize,
+            position.y * chunkWorldSize + chunkWorldSize
+        );
+
+        for (int y = 0; y < internalGrid.GetLength(0); y++)
+        {
+            for (int x = 0; x < internalGrid.GetLength(1); x++)
+            {
+                Vector2 cellPosition = new Vector2(
+                    chunkOrigin.x + x * WorldManager.cellSize,
+                    chunkOrigin.y - y * WorldManager.cellSize
+                );
+
+                internalGrid[x, y].SetWorldOrigin(new Vector3(cellPosition.x, 0f, cellPosition.y));
+            }
+        }
+
         SuppliesDataGenerator.Generate(internalGrid, seed, WorldManager.Instance.supplies);
-        SuplliesRender.Generate(internalGrid);
     }
 
-    
     /* 
         Função de hash que retorna uma seed para cada chunk que 
         manipula o binario dos  numeros para evitar qualquer semelhança 
         determinada por numeros proximos
     */
-    ulong Generateseed()
+    ulong GenerateSeed()
     {
         seed = worldSeed;
 

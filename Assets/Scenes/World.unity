@@ -23,7 +23,7 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 0.96
+  m_AmbientIntensity: 0
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0, g: 0, b: 0, a: 0}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
@@ -33,9 +33,9 @@ RenderSettings:
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
   m_DefaultReflectionMode: 0
-  m_DefaultReflectionResolution: 128
+  m_DefaultReflectionResolution: 256
   m_ReflectionBounces: 1
-  m_ReflectionIntensity: 1
+  m_ReflectionIntensity: 0
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
   m_UseRadianceAmbientProbe: 0
@@ -389,7 +389,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1392943981}
-  - {fileID: 1421147336}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &268257986
@@ -483,7 +482,8 @@ MonoBehaviour:
   playerPosition: {fileID: 7991022815127749589, guid: 975c4dbc90bd7764b8d461ac924c70ff, type: 3}
   wallPrefabScript: {fileID: 1513516132019481781, guid: 9da886937f759ab4592d4b1f2c28f032, type: 3}
   lamp: {fileID: 5693940361997200094, guid: 883823702ac64154c87a96c4f4c23b9d, type: 3}
-  supplies: []
+  supplies:
+  - {fileID: 11400000, guid: b0b9dda85989cf348ab31a0004f1ea95, type: 2}
   seed: 4196283291932386
   playerChunk: {x: 0, y: 0}
   playerCell: {x: 0, y: 0}
@@ -498,8 +498,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1103125002}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 70.87053, y: -0, z: -54.84615}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 70.87053, y: 0, z: -54.84615}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -536,6 +536,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 14403650}
+  - {fileID: 1421147336}
   m_Father: {fileID: 268257985}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1392943982
@@ -584,11 +585,11 @@ Transform:
   m_GameObject: {fileID: 1421147335}
   serializedVersion: 2
   m_LocalRotation: {x: -0.021615798, y: -0, z: -0, w: 0.99976635}
-  m_LocalPosition: {x: 0, y: 0.729, z: 0.414}
+  m_LocalPosition: {x: 0, y: -0.18100005, z: 0.414}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 268257985}
+  m_Father: {fileID: 1392943981}
   m_LocalEulerAnglesHint: {x: -2.477, y: 0, z: 0}
 --- !u!114 &1421147337
 MonoBehaviour:
@@ -603,7 +604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
+  m_AdditionalLightsShadowResolutionTier: 1
   m_CustomShadowLayers: 0
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
@@ -639,10 +640,10 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0
     m_Bias: 0.05
     m_NormalBias: 0.4
-    m_NearPlane: 0.2
+    m_NearPlane: 0.1
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
@@ -737,6 +738,6 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1103125004}
   - {fileID: 268257985}
   - {fileID: 1947350940}
+  - {fileID: 1103125004}

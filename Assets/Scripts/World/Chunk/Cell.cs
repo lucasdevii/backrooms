@@ -42,6 +42,10 @@ public class Cell
     {
         return worldOrigin;
     }
+    public Vector3 GetWorldPosition()
+    {
+        return worldOrigin;
+    }
 
     public Vector3 GetWorldCenter()
     {
