@@ -53,9 +53,11 @@
     <Compile Include="Assets\Scripts\World\Chunk\Cell.cs" />
     <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Data\GridPosition.cs" />
     <Compile Include="Assets\Scripts\UI\Bars\HealthBar.cs" />
+    <Compile Include="Assets\Scripts\Raycast\PlayerRaycast.cs" />
     <Compile Include="Assets\Scripts\World\Chunk\Chunk.cs" />
     <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\LampsRender.cs" />
     <Compile Include="Assets\Scripts\World\Chunk\Algorithmns\Render\ChunkRender.cs" />
+    <Compile Include="Assets\Scripts\Raycast\EnemysRaycast.cs" />
     <Compile Include="Assets\Scripts\Enviropment\Wall.cs" />
     <Compile Include="Assets\Scripts\UI\Bars\ThristBar.cs" />
     <Compile Include="Assets\Scripts\Camera\MainCamera.cs" />
