@@ -59,6 +59,13 @@ public class Player : MonoBehaviour
     
     private Vector3 direction;
 
+    
+    // Raycast
+    [SerializeField] LayerMask layerOfDetection;
+    float maxDistance = 5;
+
+    private PlayerRaycast raycast = new PlayerRaycast(maxDistance, layerOfDetection, MainCamera.Get());
+
     void Awake()
     {
         // Inicializa sem bloquear a corrida

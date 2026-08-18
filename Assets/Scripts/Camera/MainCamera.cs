@@ -11,6 +11,9 @@ public class MainCamera : MonoBehaviour
     [SerializeField] private float bobAmountY = 0.03f;
     [SerializeField] private float bobAmountX = 1f;
 
+    private static MainCamera Instace;
+
+    private PlayerRaycast
 
     public float sensitivityX = 0.5f;
     public float sensitivityY = 0.5f;
@@ -18,6 +21,11 @@ public class MainCamera : MonoBehaviour
     private float yRotation;
 
     private Vector3 initialCameraLocalPosition;
+
+    void Awake()
+    {
+        Instance = this;
+    }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -69,6 +77,9 @@ public class MainCamera : MonoBehaviour
             initialCameraLocalPosition +
             Vector3.right * bobX +
             Vector3.up * bobY;
+    }
+    public MainCamera Get(){
+        return Instance;
     }
 }
 
