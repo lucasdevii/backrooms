@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 
     // References
     [SerializeField] private GameObject flashlight;
+    [SerializeField] private MainCamera camera;
 
     public static Player Instance { get; private set; }
 
@@ -61,13 +62,16 @@ public class Player : MonoBehaviour
 
     
     // Raycast
+    private PlayerRaycast raycast;
     [SerializeField] LayerMask layerOfDetection;
+    [SerializeField] float detectationRadius = 0.5f;
     float maxDistance = 5;
 
-    private PlayerRaycast raycast = new PlayerRaycast(maxDistance, layerOfDetection, MainCamera.Get());
 
     void Awake()
-    {
+    {  
+        raycast  = new PlayerRaycast(maxDistance, layerOfDetection, camera, detectationRadius);
+
         // Inicializa sem bloquear a corrida
         lastRunStopTime = -timeForRunAgain;
 
@@ -98,6 +102,7 @@ public class Player : MonoBehaviour
         ReadJump();
         ReadFlashlight();
         ReadThirst();
+        raycast.VerifyRaycast();
     }
 
     void FixedUpdate()

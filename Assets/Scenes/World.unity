@@ -431,6 +431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   flashlight: {fileID: 1421147335}
+  camera: {fileID: 1392943982}
   speed: 10
   jumpForce: 20
   runningAcrescent: 5
@@ -450,6 +451,9 @@ MonoBehaviour:
   currentHealth: 0
   isRunning: 0
   isWalking: 0
+  layerOfDetection:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1103125002
 GameObject:
   m_ObjectHideFlags: 0

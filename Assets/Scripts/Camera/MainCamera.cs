@@ -11,9 +11,7 @@ public class MainCamera : MonoBehaviour
     [SerializeField] private float bobAmountY = 0.03f;
     [SerializeField] private float bobAmountX = 1f;
 
-    private static MainCamera Instace;
-
-    private PlayerRaycast
+    private static MainCamera Instance;
 
     public float sensitivityX = 0.5f;
     public float sensitivityY = 0.5f;
@@ -78,7 +76,7 @@ public class MainCamera : MonoBehaviour
             Vector3.right * bobX +
             Vector3.up * bobY;
     }
-    public MainCamera Get(){
+    public static MainCamera Get(){
         return Instance;
     }
 }
