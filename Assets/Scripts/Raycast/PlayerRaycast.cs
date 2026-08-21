@@ -8,12 +8,15 @@ public class PlayerRaycast
     MainCamera camera;
     float detectionRadius;
 
-    public PlayerRaycast(float maxDistance, LayerMask layer, MainCamera camera, float detectionRadius)
+    event Action<GameObject> OnSupply;
+
+    public PlayerRaycast(float maxDistance, LayerMask layer, MainCamera camera, float detectionRadius, Action<GameObject> action)
     {
         this.maxDistance = maxDistance;
         this.layer = layer;
         this.camera = camera;
         this.detectionRadius = detectionRadius;
+        this.OnSupply = action;
     }
 
     public GameObject VerifyRaycast()
@@ -38,11 +41,13 @@ public class PlayerRaycast
             
             if(detectedObject.CompareTag("Supply")){
                 Debug.Log("Olhou para um item!");
+                OnSupply?.Invoke(detectedObject);
 
                 return detectedObject;
             }
         }
-         
+        
+        OnSupply?.Invoke(null);
         return null;
     }
 }

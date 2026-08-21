@@ -63,14 +63,16 @@ public class Player : MonoBehaviour
     
     // Raycast
     private PlayerRaycast raycast;
+    public event Action<GameObject> OnRaycastItemObject;
     [SerializeField] LayerMask layerOfDetection;
     [SerializeField] float detectationRadius = 0.5f;
     float maxDistance = 5;
 
 
+
     void Awake()
     {  
-        raycast  = new PlayerRaycast(maxDistance, layerOfDetection, camera, detectationRadius);
+        raycast  = new PlayerRaycast(maxDistance, layerOfDetection, camera, detectationRadius, OnRaycastItemObject);
 
         // Inicializa sem bloquear a corrida
         lastRunStopTime = -timeForRunAgain;

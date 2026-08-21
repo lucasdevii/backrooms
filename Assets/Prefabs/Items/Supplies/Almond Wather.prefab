@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3589788608315890633}
   - component: {fileID: 3838512159008554019}
   - component: {fileID: 8425924873033209322}
+  - component: {fileID: 5038853750632140456}
   m_Layer: 6
   m_Name: Almond Wather
   m_TagString: Supply
@@ -112,3 +113,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1.0000001}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5038853750632140456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6934952714221334627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33a0ecdd146089d4e939fe5974e61522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Supply
+  data: {fileID: 11400000, guid: b0b9dda85989cf348ab31a0004f1ea95, type: 2}
+  quantityOfUses: 0
