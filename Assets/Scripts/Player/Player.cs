@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     // References
     [SerializeField] private GameObject flashlight;
     [SerializeField] private MainCamera camera;
-
+    [SerializeField] private Transform grappedItemPosition;
     public static Player Instance { get; private set; }
 
     // Movement
@@ -62,6 +62,7 @@ public class Player : MonoBehaviour
 
     
     // Raycast
+    private GameObject item = null;
     private PlayerRaycast raycast;
     public event Action<GameObject> OnRaycastItemObject;
     [SerializeField] LayerMask layerOfDetection;
@@ -104,7 +105,9 @@ public class Player : MonoBehaviour
         ReadJump();
         ReadFlashlight();
         ReadThirst();
-        raycast.VerifyRaycast();
+
+        item = raycast.VerifyRaycast();
+        IsInteracting();
     }
 
     void FixedUpdate()
@@ -269,6 +272,23 @@ public class Player : MonoBehaviour
         currentThirst = Mathf.Clamp(currentThirst + value, 0, maxThirst);
     }
 
+    // ------------- Iterações -----------------
+    void SetGrappedItem(GameObject objectItem)
+    {
+        objectItem.transform.position = grappedItemPosition.transform.position;
+        objectItem.transform.rotation = camera.transform.rotation;
+        objectItem.transform.SetParent(camera.transform);
+    }
+
+    void IsInteracting()
+    {
+        if(item is GameObject && Input.GetKeyDown(KeyCode.E))
+        {
+            SetGrappedItem(item);
+        }
+    } 
+
+    // ------------- CColisoes -----------------
     void OnCollisionStay(Collision collision)
     {
         if(collision.gameObject.CompareTag("Ground")){ 

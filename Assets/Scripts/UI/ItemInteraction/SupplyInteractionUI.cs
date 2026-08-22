@@ -42,10 +42,9 @@ public class SupplyInteractionUI : MonoBehaviour
             
             Debug.Log("Item: " + itemName); 
         }
-        else
-        {
+        else    
             HideUI();
-        }
+
     }
 
     void HideUI()
